@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Kroni Ademit — Restaurant & Apartments • Skënderaj</title>
+    <meta
+      name="description"
+      content="Hilltop restaurant with apartments, weddings & events, horses, and nature in Skënderaj."
+    />
+    <meta name="theme-color" content="#0ea5e9" />
+
+    <!-- Tailwind CSS (CDN) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              brand: { 500: "#0ea5e9", 600: "#0b83b8" },
+            },
+            boxShadow: { glow: "0 0 40px rgba(14,165,233,.25)" },
+            backgroundImage: {
+              "hero-grad":
+                "radial-gradient(1000px 600px at 20% 10%, rgba(14,165,233,.18), transparent 60%), radial-gradient(900px 600px at 80% 10%, rgba(99,102,241,.18), transparent 60%)",
+            },
+          },
+        },
+      };
+    </script>
+
+    <!-- Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --heading: "Playfair Display", serif;
+        --text: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial,
+          sans-serif;
+      }
+      .h1 {
+        font-family: var(--heading);
+      }
+      .body {
+        font-family: var(--text);
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      .flag-btn {
+        line-height: 1;
+      }
+    </style>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.3.2/css/flag-icons.min.css"
+    />
+    <!-- React 18 UMD + Babel Standalone to compile JSX in the browser -->
+    <script
+      crossorigin
+      src="https://unpkg.com/react@18/umd/react.development.js"
+    ></script>
+    <script
+      crossorigin
+      src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"
+    ></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  </head>
+  <body class="bg-white body text-stone-800">
+    <div id="root"></div>
+
+    <!-- App (JSX compiled by Babel) -->
+    <script type="text/babel">
+      // ------------------ TRANSLATIONS ------------------
+      const T = {
+        sq: {
+          nav: {
+            about: "Rreth Nesh",
+            services: "Shërbimet",
+            gallery: "Galeria",
+            menu: "Menuja",
+            location: "Lokacioni",
+            contact: "Kontakti",
+            book: "Rezervo Tani",
+          },
+          hero: {
+            title: "Restorant & Apartamente në majë të kodrës në Skënderaj",
+            lead: "Mirë se vini në {brand} — një arratisje e qetë me ushqim të freskët, fusha të gjelbra, kuaj dhe pamje panoramike. Qëndroni një natë, festoni një moment të veçantë ose mblidhni miqtë për një ditë që nuk harrohet.",
+            cta1: "Rezervo Tavolinë",
+            cta2: "Shiko Shërbimet",
+          },
+          about: {
+            title: "Rreth Kroni Ademit",
+            body: "Në majë të një kodre mbi Skënderaj, Kroni Ademit bashkon hijeshinë rurale me rehati moderne. Kuzhina jonë fokusohet te shijet vendore dhe produktet sezonale; oborret dhe tarracat ftojnë biseda të gjata nën qiellin e hapur. Qëndroni në apartamentet tona, njihuni me kuajt dhe eksploroni natyrën — ose rezervoni gjithë hapësirën për dasma, ditëlindje dhe ngjarje të veçanta.",
+            f1: "E Freskët & Vendore",
+            f2: "Pamje Kodrinore",
+            f3: "Rezervim i Lehtë",
+          },
+          servicesTitle: "Shërbimet",
+          servicesSub:
+            "Për drekë të thjeshtë apo për një ngjarje të madhe — ne jemi këtu për ju.",
+          services: [
+            {
+              title: "Restorant",
+              desc: "Specialitete në skarë, pjata tradicionale për t’u ndarë, sallata të freskëta dhe ëmbëlsira shtëpie.",
+            },
+            {
+              title: "Dasma & Evente",
+              desc: "Hapësira të gjera me gjelbërim dhe tarraca. E përkryer për dasma, ditëlindje dhe evente biznesi.",
+            },
+            {
+              title: "Apartamente",
+              desc: "Dhoma komode në vend, për pushim të plotë dhe mëngjese me qiell blu.",
+            },
+            {
+              title: "Kuaj & Kafshë",
+              desc: "Njihuni me kafshët tona miqësore dhe përjetoni kalërim të lehtë.",
+            },
+            {
+              title: "Arratisje në Natyrë",
+              desc: "Pamje të hapura, ajër i pastër dhe shtigje të qeta për shëtitje.",
+            },
+          ],
+          galleryTitle: "Galeria",
+          gallerySub: "Një vështrim në hapësirë dhe atmosferë.",
+          menuTitle: "Shija e fshatit",
+          menuBody:
+            "Pjatat tona për t’u ndarë janë ideale — mishra në skarë, perime sezonale dhe salca shtëpie. Pyesni për ofertat e ditës dhe recetat tradicionale.",
+          menuItems: [
+            "Pjatë e përbashkët për 2–4",
+            "Sallata fshati & bukë e freskët",
+            "Ëmbëlsira të shtëpisë & kafe",
+          ],
+          find: "Na Gjeni",
+          findSub: "Skënderaj, Kosovë — në kodrën mbi qytet.",
+          addressTitle: "Adresa & Orari",
+          addressText:
+            "Kroni Ademit, Skënderaj, Kosovë\nVendndodhje në kodër me parking privat.",
+          openMaps: "Hape në Hartë",
+          contactUs: "Na Kontakto",
+          openHours: "Hapur: Hënë–Diele (telefononi për orarin & eventet)",
+          contactTitle: "Kontakt & Rezervime",
+          contactLead:
+            "Po planifikoni dasmë apo festë? Dëshironi një fundjavë pushimi? Na shkruani dhe e realizojmë lehtë.",
+          phoneLabel: "+383 00 000 000",
+          emailLabel: "info@kroniademit.com",
+          formName: "Emri juaj",
+          formEmail: "Email",
+          formPhone: "Telefon (opsionale)",
+          formMsg: "Na tregoni për vizitën apo eventin...",
+          formSend: "Dërgo",
+          reserve: "Rezervo Tavolinë",
+          seeServices: "Shiko Shërbimet",
+        },
+        hr: {
+          nav: {
+            about: "O nama",
+            services: "Usluge",
+            gallery: "Galerija",
+            menu: "Jelovnik",
+            location: "Lokacija",
+            contact: "Kontakt",
+            book: "Rezerviraj",
+          },
+          hero: {
+            title: "Brdski restoran i apartmani u Skenderaju",
+            lead: "Dobrodošli u {brand} — mirno utočište sa svježom hranom, prostranim travnjacima, konjima i panoramskim pogledima. Ostanite preko noći, proslavite važan trenutak ili okupite ekipu za dan za pamćenje.",
+            cta1: "Rezerviraj stol",
+            cta2: "Pogledaj usluge",
+          },
+          about: {
+            title: "O Kroni Ademit",
+            body: "Na mirnoj uzvisini iznad Skenderaja, Kroni Ademit spaja seoski šarm i modernu udobnost. Kuhinja se oslanja na lokalne okuse i sezonske namirnice; travnjaci i terase mame na duge razgovore pod otvorenim nebom. Odsjednite u našim apartmanima, upoznajte konje i prirodu — ili iznajmite cijeli prostor za vjenčanja, rođendane i druge proslave.",
+            f1: "Svježe & Lokalno",
+            f2: "Pogledi s uzvisine",
+            f3: "Jednostavno rezerviranje",
+          },
+          servicesTitle: "Usluge",
+          servicesSub: "Za ručak ili za veliki događaj — tu smo.",
+          services: [
+            {
+              title: "Restoran",
+              desc: "Roštilj i specijaliteti, seoske plate, svježe salate i domaći deserti.",
+            },
+            {
+              title: "Vjenčanja & Događaji",
+              desc: "Veliki travnjaci i terase. Idealno za vjenčanja, rođendane i poslovna druženja.",
+            },
+            {
+              title: "Apartmani",
+              desc: "Udobne sobe u sklopu objekta — probudite se uz plavo nebo.",
+            },
+            {
+              title: "Konji & Životinje",
+              desc: "Upoznajte naše pitome životinje i lagano jahanje.",
+            },
+            {
+              title: "Bijeg u prirodu",
+              desc: "Široki vidici, čist zrak i mirne staze za šetnju.",
+            },
+          ],
+          galleryTitle: "Galerija",
+          gallerySub: "Zavirite u prostor i atmosferu.",
+          menuTitle: "Okus sela",
+          menuBody:
+            "Naše zajedničke plate savršene su za dijeljenje — meso s roštilja, sezonsko povrće i domaći umaci. Pitajte za dnevne ponude i tradicionalna jela.",
+          menuItems: [
+            "Miješana plata za 2–4",
+            "Seoske salate i svježi kruh",
+            "Domaći deserti i kava",
+          ],
+          find: "Pronađite nas",
+          findSub: "Skenderaj, Kosovo — na uzvisini iznad grada.",
+          addressTitle: "Adresa & Radno vrijeme",
+          addressText:
+            "Kroni Ademit, Skenderaj, Kosovo\nLokacija na brdu s privatnim parkingom.",
+          openMaps: "Otvori u kartama",
+          contactUs: "Kontaktiraj nas",
+          openHours:
+            "Otvoreno: Pon–Ned (provjerite telefonom za sate i događaje)",
+          contactTitle: "Kontakt & Rezervacije",
+          contactLead:
+            "Planirate vjenčanje ili proslavu? Želite vikend bijeg? Javite nam se — sve ćemo olakšati.",
+          phoneLabel: "+383 00 000 000",
+          emailLabel: "info@kroniademit.com",
+          formName: "Vaše ime",
+          formEmail: "Email",
+          formPhone: "Telefon (opcionalno)",
+          formMsg: "Recite nam o posjetu ili događaju...",
+          formSend: "Pošalji",
+          reserve: "Rezerviraj stol",
+          seeServices: "Pogledaj usluge",
+        },
+        en: {
+          nav: {
+            about: "About",
+            services: "Services",
+            gallery: "Gallery",
+            menu: "Menu",
+            location: "Location",
+            contact: "Contact",
+            book: "Book Now",
+          },
+          hero: {
+            title: "Hilltop Restaurant & Apartments in Skënderaj",
+            lead: "Welcome to {brand} — a peaceful escape with fresh food, open lawns, horses, and panoramic views. Stay a night, celebrate a milestone, or gather your people for a memorable day.",
+            cta1: "Reserve a Table",
+            cta2: "See Services",
+          },
+          about: {
+            title: "About Kroni Ademit",
+            body: "Perched on a tranquil hill above Skënderaj, Kroni Ademit blends rural charm with modern comfort. Our kitchen focuses on local flavors and seasonal produce; our lawns and terraces invite slow conversations under big skies. Stay in our apartments, meet the horses, and explore the countryside — or turn the whole place into your private venue for weddings, birthdays, and special gatherings.",
+            f1: "Fresh & Local",
+            f2: "Hilltop Views",
+            f3: "Easy Booking",
+          },
+          servicesTitle: "Services",
+          servicesSub:
+            "Whether you’re here for lunch or a life event, we’ve got you.",
+          services: [
+            {
+              title: "Restaurant",
+              desc: "Grilled specialties, village-style platters, fresh salads & house desserts.",
+            },
+            {
+              title: "Weddings & Events",
+              desc: "Spacious lawns & terrace seating. Book for weddings, birthdays, and corporate days.",
+            },
+            {
+              title: "Apartments",
+              desc: "Comfortable rooms on-site so you can relax and wake up to blue skies.",
+            },
+            {
+              title: "Horses & Animals",
+              desc: "Meet our friendly animals and enjoy gentle horseback experiences.",
+            },
+            {
+              title: "Nature Escape",
+              desc: "Open views, clean air, and quiet paths for slow walks.",
+            },
+          ],
+          galleryTitle: "Gallery",
+          gallerySub: "A peek at the space and the vibe.",
+          menuTitle: "Taste of the Countryside",
+          menuBody:
+            "Our signature platters are perfect for sharing—grilled meats, seasonal veggies, and house sauces. Ask for daily specials and traditional recipes.",
+          menuItems: [
+            "Mixed Grill for 2–4",
+            "Village Salads & Fresh Breads",
+            "House Desserts & Coffee",
+          ],
+          find: "Find Us",
+          findSub: "Skënderaj, Kosovo — on the hill above town.",
+          addressTitle: "Address & Hours",
+          addressText:
+            "Kroni Ademit, Skënderaj, Kosovo\nHilltop location with private parking.",
+          openMaps: "Open in Maps",
+          contactUs: "Contact Us",
+          openHours: "Open: Mon–Sun (call to confirm hours & events)",
+          contactTitle: "Contact & Bookings",
+          contactLead:
+            "Planning a wedding or celebration? Want a weekend away? Reach out and we’ll make it easy.",
+          phoneLabel: "+383 00 000 000",
+          emailLabel: "info@kroniademit.com",
+          formName: "Your name",
+          formEmail: "Email",
+          formPhone: "Phone (optional)",
+          formMsg: "Tell us about your visit or event...",
+          formSend: "Send",
+          reserve: "Reserve a Table",
+          seeServices: "See Services",
+        },
+      };
+
+      const fmt = (s, map) => s.replace(/\{(\w+)\}/g, (_, k) => map[k] ?? "");
+
+      // Read initial lang from ?lang= or localStorage; default to Albanian (sq)
+      const getInitialLang = () => {
+        const url = new URL(window.location.href);
+        const q = (url.searchParams.get("lang") || "").toLowerCase();
+        if (q && (q === "sq" || q === "hr" || q === "en")) return q;
+        const saved = localStorage.getItem("lang");
+        if (saved && (saved === "sq" || saved === "hr" || saved === "en"))
+          return saved;
+        return "sq";
+      };
+
+      // ------------------ ICONS ------------------
+      const Icon = {
+        phone: (cls = "w-5 h-5") => (
+          <svg
+            className={cls}
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+          >
+            <path
+              strokeWidth="1.5"
+              d="M2.25 4.5c0-.414.336-.75.75-.75h3A1.5 1.5 0 0 1 7.5 5.25v2.25a1.5 1.5 0 0 1-.439 1.06l-1.06 1.06a.75.75 0 0 0 0 1.06l5.318 5.318a.75.75 0 0 0 1.06 0l1.06-1.06a1.5 1.5 0 0 1 1.06-.439H18.75A1.5 1.5 0 0 1 20.25 15v3a.75.75 0 0 1-.75.75A17.25 17.25 0 0 1 2.25 6.75v-1.5Z"
+            />
+          </svg>
+        ),
+        mail: (cls = "w-5 h-5") => (
+          <svg
+            className={cls}
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+          >
+            <path
+              strokeWidth="1.5"
+              d="M3 5.25h18a.75.75 0 0 1 .75.75v12a.75.75 0 0 1-.75.75H3A.75.75 0 0 1 2.25 18V6A.75.75 0 0 1 3 5.25Z"
+            />
+            <path strokeWidth="1.5" d="m3 6 9 6 9-6" />
+          </svg>
+        ),
+        map: (cls = "w-5 h-5") => (
+          <svg
+            className={cls}
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+          >
+            <path
+              strokeWidth="1.5"
+              d="M9 6.75 3.75 4.5v14.25L9 21M9 6.75l6 2.25m-6-2.25V21m6-12 5.25-2.25v14.25L15 21m0-12v12"
+            />
+          </svg>
+        ),
+        spark: (cls = "w-5 h-5") => (
+          <svg
+            className={cls}
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+          >
+            <path
+              strokeWidth="1.5"
+              d="M12 2.25v4.5m0 10.5v4.5M2.25 12h4.5m10.5 0h4.5M5.47 5.47l3.18 3.18m6.7 6.7 3.18 3.18m0-13.06-3.18 3.18m-6.7 6.7-3.18 3.18"
+            />
+          </svg>
+        ),
+      };
+
+      const Nav = ({ t, lang, setLang }) => (
+        <header className="fixed top-0 inset-x-0 z-50 backdrop-blur bg-white/60 border-b border-black/5">
+          <div className="max-w-6xl mx-auto px-4">
+            <div className="flex items-center justify-between h-16">
+              <a href="#" className="h1 text-xl text-stone-900">
+                Kroni <span className="text-brand-600">Ademit</span>
+              </a>
+              <nav className="hidden md:flex gap-6 text-sm font-semibold text-stone-700">
+                <a href="#about" className="hover:text-brand-600">
+                  {t.nav.about}
+                </a>
+                <a href="#services" className="hover:text-brand-600">
+                  {t.nav.services}
+                </a>
+                <a href="#gallery" className="hover:text-brand-600">
+                  {t.nav.gallery}
+                </a>
+                <a href="#menu" className="hover:text-brand-600">
+                  {t.nav.menu}
+                </a>
+                <a href="#location" className="hover:text-brand-600">
+                  {t.nav.location}
+                </a>
+                <a href="#contact" className="hover:text-brand-600">
+                  {t.nav.contact}
+                </a>
+              </nav>
+              <div className="flex items-center gap-3">
+                <LanguageDropdown lang={lang} setLang={setLang} />
+              </div>
+            </div>
+          </div>
+        </header>
+      );
+
+      const Hero = ({ t }) => (
+        <section className="pt-28 md:pt-32 bg-hero-grad">
+          <div className="max-w-6xl mx-auto px-4 grid md:grid-cols-2 gap-10 items-center">
+            <div>
+              <h1 className="h1 text-4xl md:text-5xl leading-tight text-stone-900">
+                {t.hero.title}
+              </h1>
+              <p className="mt-4 text-stone-600 text-lg">
+                {fmt(t.hero.lead, { brand: "Kroni Ademit" })}
+              </p>
+              <div className="mt-6 flex flex-wrap gap-3">
+                <a
+                  href="#contact"
+                  className="px-5 py-3 rounded-xl bg-brand-500 text-white font-semibold shadow-glow hover:translate-y-[-1px] transition"
+                >
+                  {t.hero.cta1}
+                </a>
+                <a
+                  href="#services"
+                  className="px-5 py-3 rounded-xl border border-stone-200 text-stone-800 font-semibold hover:border-brand-400 hover:text-brand-700 transition"
+                >
+                  {t.hero.cta2}
+                </a>
+              </div>
+            </div>
+            <div className="relative rounded-2xl overflow-hidden shadow-2xl">
+              <img
+                src="images/slika1.jpg"
+                alt="Kroni Ademit grounds on a sunny day"
+                className="w-full h-[340px] object-cover"
+              />
+              <div className="absolute inset-0 ring-1 ring-black/5 pointer-events-none"></div>
+            </div>
+          </div>
+        </section>
+      );
+
+      const Feature = ({ icon, title }) => (
+        <div className="flex items-center gap-3 p-3 rounded-xl border border-stone-200">
+          {icon("w-5 h-5 text-brand-600")}
+          <span className="font-semibold text-stone-800">{title}</span>
+        </div>
+      );
+
+      const About = ({ t }) => (
+        <section id="about" className="py-20">
+          <div className="max-w-6xl mx-auto px-4 grid md:grid-cols-2 gap-10 items-center">
+            <div className="rounded-2xl overflow-hidden">
+              <img
+                src="images/slika2.jpg"
+                alt="Restaurant facade at dusk"
+                className="w-full h-[360px] object-cover"
+              />
+            </div>
+            <div>
+              <h2 className="h1 text-3xl md:text-4xl text-stone-900">
+                {t.about.title}
+              </h2>
+              <p className="mt-4 text-stone-700 leading-relaxed">
+                {t.about.body}
+              </p>
+              <div className="mt-6 grid sm:grid-cols-3 gap-3">
+                <Feature icon={Icon.spark} title={t.about.f1} />
+                <Feature icon={Icon.map} title={t.about.f2} />
+                <Feature icon={Icon.phone} title={t.about.f3} />
+              </div>
+            </div>
+          </div>
+        </section>
+      );
+
+      const Services = ({ t }) => {
+        const emojis = ["🍽️", "🎉", "🛏️", "🐎", "🌿"];
+        return (
+          <section
+            id="services"
+            className="py-20 bg-gradient-to-b from-white to-slate-50"
+          >
+            <div className="max-w-6xl mx-auto px-4">
+              <h2 className="h1 text-3xl md:text-4xl text-stone-900 text-center">
+                {t.servicesTitle}
+              </h2>
+              <p className="mt-3 text-stone-600 text-center max-w-2xl mx-auto">
+                {t.servicesSub}
+              </p>
+              <div className="mt-10 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {t.services.map((it, idx) => (
+                  <div
+                    key={it.title}
+                    className="p-6 rounded-2xl border border-stone-200 bg-white shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition"
+                  >
+                    <div className="text-3xl">{emojis[idx]}</div>
+                    <h3 className="mt-3 font-bold text-lg text-stone-900">
+                      {it.title}
+                    </h3>
+                    <p className="mt-2 text-stone-600">{it.desc}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        );
+      };
+
+      const Gallery = ({ t }) => (
+        <section id="gallery" className="py-20">
+          <div className="max-w-6xl mx-auto px-4">
+            <h2 className="h1 text-3xl md:text-4xl text-stone-900 text-center">
+              {t.galleryTitle}
+            </h2>
+            <p className="mt-3 text-stone-600 text-center">{t.gallerySub}</p>
+            <div className="mt-10 grid md:grid-cols-3 gap-4">
+              <img
+                src="images/slika4.jpg"
+                alt="Terrace from above"
+                className="rounded-xl h-64 w-full object-cover"
+              />
+              <img
+                src="images/slika1.jpg"
+                alt="Garden paths and trees"
+                className="rounded-xl h-64 w-full object-cover"
+              />
+              <img
+                src="images/slika2.jpg"
+                alt="Facade and lawn at dusk"
+                className="rounded-xl h-64 w-full object-cover"
+              />
+            </div>
+          </div>
+        </section>
+      );
+
+      const MenuTeaser = ({ t }) => (
+        <section
+          id="menu"
+          className="py-20 bg-gradient-to-b from-slate-50 to-white"
+        >
+          <div className="max-w-6xl mx-auto px-4 grid md:grid-cols-2 gap-10 items-center">
+            <div className="rounded-2xl overflow-hidden shadow-lg">
+              <img
+                src="images/slika3.jpg"
+                alt="Village-style mixed grill platter"
+                className="w-full h-[360px] object-cover"
+              />
+            </div>
+            <div>
+              <h2 className="h1 text-3xl md:text-4xl text-stone-900">
+                {t.menuTitle}
+              </h2>
+              <p className="mt-4 text-stone-700">{t.menuBody}</p>
+              <ul className="mt-4 space-y-2 text-stone-700">
+                {t.menuItems.map((item) => (
+                  <li key={item}>• {item}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </section>
+      );
+
+      const Location = ({ t }) => (
+        <section id="location" className="py-20">
+          <div className="max-w-6xl mx-auto px-4">
+            <h2 className="h1 text-3xl md:text-4xl text-stone-900 text-center">
+              {t.find}
+            </h2>
+            <p className="mt-3 text-stone-600 text-center">{t.findSub}</p>
+            <div className="mt-8 grid lg:grid-cols-2 gap-6">
+              <div className="rounded-2xl overflow-hidden border border-stone-200">
+                <iframe
+                  title="Kroni Ademit Map"
+                  src="https://www.google.com/maps?q=Kroni%20Ademit%20Sk%C3%ABnderaj&output=embed"
+                  className="w-full h-[380px]"
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                ></iframe>
+              </div>
+              <div className="p-6 rounded-2xl border border-stone-200 bg-white">
+                <h3 className="font-bold text-xl text-stone-900">
+                  {t.addressTitle}
+                </h3>
+                <p
+                  className="mt-3 text-stone-700"
+                  style={{ whiteSpace: "pre-line" }}
+                >
+                  {t.addressText}
+                </p>
+                <div className="mt-4 grid sm:grid-cols-2 gap-3">
+                  <a
+                    href="https://www.google.com/maps?q=Kroni%20Ademit%20Sk%C3%ABnderaj"
+                    target="_blank"
+                    className="inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl border border-stone-200 hover:border-brand-400"
+                  >
+                    <svg
+                      className="w-5 h-5"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeWidth="1.5"
+                        d="M12 21s-6.75-6.223-6.75-11.25A6.75 6.75 0 1 1 18.75 9.75C18.75 14.777 12 21 12 21Z"
+                      />
+                      <circle cx="12" cy="9.75" r="2.25" strokeWidth="1.5" />
+                    </svg>
+                    {t.openMaps}
+                  </a>
+                  <a
+                    href="#contact"
+                    className="inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-brand-500 text-white hover:opacity-90"
+                  >
+                    {t.contactUs}
+                  </a>
+                </div>
+                <div className="mt-4 text-stone-700">
+                  <p>
+                    <strong>{t.openHours}</strong>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      );
+
+      const Contact = ({ t }) => (
+        <section id="contact" className="py-20 bg-slate-50">
+          <div className="max-w-6xl mx-auto px-4">
+            <div className="rounded-2xl border border-stone-200 bg-white p-8 md:p-10">
+              <div className="grid md:grid-cols-2 gap-10">
+                <div>
+                  <h2 className="h1 text-3xl md:text-4xl text-stone-900">
+                    {t.contactTitle}
+                  </h2>
+                  <p className="mt-4 text-stone-700">{t.contactLead}</p>
+                  <div className="mt-6 space-y-3">
+                    <a
+                      href="tel:+38300000000"
+                      className="flex items-center gap-3 text-stone-800 hover:text-brand-600"
+                    >
+                      {Icon.phone("w-5 h-5")} <span>{t.phoneLabel}</span>
+                    </a>
+                    <a
+                      href="mailto:info@kroniademit.com"
+                      className="flex items-center gap-3 text-stone-800 hover:text-brand-600"
+                    >
+                      {Icon.mail("w-5 h-5")} <span>{t.emailLabel}</span>
+                    </a>
+                  </div>
+                </div>
+                <form
+                  action="mailto:info@kroniademit.com"
+                  method="post"
+                  className="grid grid-cols-1 gap-4"
+                >
+                  <input
+                    className="px-4 py-3 rounded-xl border border-stone-300"
+                    placeholder={t.formName}
+                    required
+                  />
+                  <input
+                    type="email"
+                    className="px-4 py-3 rounded-xl border border-stone-300"
+                    placeholder={t.formEmail}
+                    required
+                  />
+                  <input
+                    className="px-4 py-3 rounded-xl border border-stone-300"
+                    placeholder={t.formPhone}
+                  />
+                  <textarea
+                    rows="5"
+                    className="px-4 py-3 rounded-xl border border-stone-300"
+                    placeholder={t.formMsg}
+                  ></textarea>
+                  <button className="mt-2 px-5 py-3 rounded-xl bg-brand-500 text-white font-semibold hover:opacity-90">
+                    {t.formSend}
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </section>
+      );
+
+      const LanguageDropdown = ({ lang, setLang }) => {
+        const [open, setOpen] = React.useState(false);
+        const opts = [
+          {
+            code: "sq",
+            label: "Shqip",
+            flag: "fi fi-al",
+          },
+          {
+            code: "hr",
+            label: "Hrvatski",
+            flag: "fi fi-hr",
+          },
+          {
+            code: "en",
+            label: "English",
+            flag: "fi fi-gb",
+          },
+        ];
+
+        const current = opts.find((o) => o.code === lang) || opts[0];
+
+        const choose = (code) => {
+          setLang(code);
+          localStorage.setItem("lang", code);
+          const url = new URL(window.location.href);
+          url.searchParams.set("lang", code);
+          history.replaceState({}, "", url.toString());
+          setOpen(false);
+        };
+
+        // close when clicking outside
+        React.useEffect(() => {
+          const onClick = (e) => {
+            if (!e.target.closest?.("#lang-dd")) setOpen(false);
+          };
+          window.addEventListener("click", onClick);
+          return () => window.removeEventListener("click", onClick);
+        }, []);
+
+        return (
+          <div id="lang-dd" className="relative">
+            <button
+              onClick={() => setOpen((v) => !v)}
+              className="flag-btn inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-stone-300 bg-white text-sm hover:border-brand-500"
+              aria-haspopup="listbox"
+              aria-expanded={open}
+              title="Language"
+            >
+              <span className={current.flag}></span>
+              <svg
+                className="w-4 h-4 opacity-70"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+              >
+                <path strokeWidth="1.5" d="M6 9l6 6 6-6" />
+              </svg>
+            </button>
+
+            {open && (
+              <ul
+                role="listbox"
+                className="absolute right-0 mt-2 w-35 rounded-xl border border-stone-200 bg-white shadow-lg z-50 overflow-hidden"
+              >
+                {opts.map((o) => (
+                  <li key={o.code}>
+                    <button
+                      role="option"
+                      aria-selected={o.code === lang}
+                      onClick={() => choose(o.code)}
+                      className={`w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-stone-50 ${
+                        o.code === lang ? "bg-stone-50" : ""
+                      }`}
+                    >
+                      <span className={o.flag}></span>
+                      <span>{o.label}</span>
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        );
+      };
+
+      const Footer = ({ t }) => (
+        <footer className="py-10 border-t border-black/5">
+          <div className="max-w-6xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-stone-600">
+            <p>© {new Date().getFullYear()} Kroni Ademit — Skënderaj</p>
+          </div>
+        </footer>
+      );
+
+      const App = () => {
+        const [lang, setLang] = React.useState(getInitialLang());
+        const t = T[lang];
+
+        React.useEffect(() => {
+          // save to localStorage and ensure URL param is set
+          localStorage.setItem("lang", lang);
+          const url = new URL(window.location.href);
+          url.searchParams.set("lang", lang);
+          history.replaceState({}, "", url.toString());
+        }, [lang]);
+
+        return (
+          <>
+            <Nav t={t} lang={lang} setLang={setLang} />
+            <Hero t={t} />
+            <About t={t} />
+            <Services t={t} />
+            <Gallery t={t} />
+            <MenuTeaser t={t} />
+            <Location t={t} />
+            <Contact t={t} />
+            <Footer t={t} />
+          </>
+        );
+      };
+
+      const root = ReactDOM.createRoot(document.getElementById("root"));
+      root.render(<App />);
+    </script>
+  </body>
+</html>
