@@ -3,22 +3,21 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Kroni Ademit — Restaurant & Apartments • Skënderaj</title>
+    <title>Tebaca Adem — Restaurant & Apartments • Skënderaj</title>
     <meta
       name="description"
       content="Hilltop restaurant with apartments, weddings & events, horses, and nature in Skënderaj."
     />
     <meta name="theme-color" content="#0ea5e9" />
-
+    <link rel="icon" type="image/png" href="/public/favicon-96x96.png" />
+    <link rel="shortcut icon" href="/public/favicon.ico" />
     <!-- Tailwind CSS (CDN) -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
         theme: {
           extend: {
-            colors: {
-              brand: { 500: "#0ea5e9", 600: "#0b83b8" },
-            },
+            colors: { brand: { 500: "#0ea5e9", 600: "#0b83b8" } },
             boxShadow: { glow: "0 0 40px rgba(14,165,233,.25)" },
             backgroundImage: {
               "hero-grad":
@@ -57,7 +56,8 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.3.2/css/flag-icons.min.css"
     />
-    <!-- React 18 UMD + Babel Standalone to compile JSX in the browser -->
+
+    <!-- React 18 UMD + Babel -->
     <script
       crossorigin
       src="https://unpkg.com/react@18/umd/react.development.js"
@@ -71,9 +71,9 @@
   <body class="bg-white body text-stone-800">
     <div id="root"></div>
 
-    <!-- App (JSX compiled by Babel) -->
     <script type="text/babel">
       // ------------------ TRANSLATIONS ------------------
+      const BRAND = "Tebaca Adem";
       const T = {
         sq: {
           nav: {
@@ -92,8 +92,8 @@
             cta2: "Shiko Shërbimet",
           },
           about: {
-            title: "Rreth Kroni Ademit",
-            body: "Në majë të një kodre mbi Skënderaj, Kroni Ademit bashkon hijeshinë rurale me rehati moderne. Kuzhina jonë fokusohet te shijet vendore dhe produktet sezonale; oborret dhe tarracat ftojnë biseda të gjata nën qiellin e hapur. Qëndroni në apartamentet tona, njihuni me kuajt dhe eksploroni natyrën — ose rezervoni gjithë hapësirën për dasma, ditëlindje dhe ngjarje të veçanta.",
+            title: `Rreth ${BRAND}`,
+            body: "Në majë të një kodre mbi Skënderaj, Tebaca Adem bashkon hijeshinë rurale me rehati moderne. Kuzhina jonë fokusohet te shijet vendore dhe produktet sezonale; oborret dhe tarracat ftojnë biseda të gjata nën qiellin e hapur. Qëndroni në apartamentet tona, njihuni me kuajt dhe eksploroni natyrën — ose rezervoni gjithë hapësirën për dasma, ditëlindje dhe ngjarje të veçanta.",
             f1: "E Freskët & Vendore",
             f2: "Pamje Kodrinore",
             f3: "Rezervim i Lehtë",
@@ -136,16 +136,15 @@
           find: "Na Gjeni",
           findSub: "Skënderaj, Kosovë — në kodrën mbi qytet.",
           addressTitle: "Adresa & Orari",
-          addressText:
-            "Kroni Ademit, Skënderaj, Kosovë\nVendndodhje në kodër me parking privat.",
+          addressText: `Fazli Barani Skenderaj, Kuqice, Skënderaj 41000, Kosovë\nVendndodhje në kodër me parking privat.`,
           openMaps: "Hape në Hartë",
           contactUs: "Na Kontakto",
           openHours: "Hapur: Hënë–Diele (telefononi për orarin & eventet)",
           contactTitle: "Kontakt & Rezervime",
           contactLead:
             "Po planifikoni dasmë apo festë? Dëshironi një fundjavë pushimi? Na shkruani dhe e realizojmë lehtë.",
-          phoneLabel: "+383 00 000 000",
-          emailLabel: "info@kroniademit.com",
+          phoneLabel: "+38349700700",
+          emailLabel: "info@tebacaadem.com",
           formName: "Emri juaj",
           formEmail: "Email",
           formPhone: "Telefon (opsionale)",
@@ -171,8 +170,8 @@
             cta2: "Pogledaj usluge",
           },
           about: {
-            title: "O Kroni Ademit",
-            body: "Na mirnoj uzvisini iznad Skenderaja, Kroni Ademit spaja seoski šarm i modernu udobnost. Kuhinja se oslanja na lokalne okuse i sezonske namirnice; travnjaci i terase mame na duge razgovore pod otvorenim nebom. Odsjednite u našim apartmanima, upoznajte konje i prirodu — ili iznajmite cijeli prostor za vjenčanja, rođendane i druge proslave.",
+            title: `O ${BRAND}`,
+            body: "Na mirnoj uzvisini iznad Skenderaja, Tebaca Adem spaja seoski šarm i modernu udobnost. Kuhinja se oslanja na lokalne okuse i sezonske namirnice; travnjaci i terase mame na duge razgovore pod otvorenim nebom. Odsjednite u našim apartmanima, upoznajte konje i prirodu — ili iznajmite cijeli prostor za vjenčanja, rođendane i druge proslave.",
             f1: "Svježe & Lokalno",
             f2: "Pogledi s uzvisine",
             f3: "Jednostavno rezerviranje",
@@ -214,8 +213,7 @@
           find: "Pronađite nas",
           findSub: "Skenderaj, Kosovo — na uzvisini iznad grada.",
           addressTitle: "Adresa & Radno vrijeme",
-          addressText:
-            "Kroni Ademit, Skenderaj, Kosovo\nLokacija na brdu s privatnim parkingom.",
+          addressText: `Fazli Barani Skenderaj, Kuqice, Skënderaj 41000, Kosovo\nLokacija na brdu s privatnim parkingom.`,
           openMaps: "Otvori u kartama",
           contactUs: "Kontaktiraj nas",
           openHours:
@@ -223,8 +221,8 @@
           contactTitle: "Kontakt & Rezervacije",
           contactLead:
             "Planirate vjenčanje ili proslavu? Želite vikend bijeg? Javite nam se — sve ćemo olakšati.",
-          phoneLabel: "+383 00 000 000",
-          emailLabel: "info@kroniademit.com",
+          phoneLabel: "+38349700700",
+          emailLabel: "info@tebacaadem.com",
           formName: "Vaše ime",
           formEmail: "Email",
           formPhone: "Telefon (opcionalno)",
@@ -250,8 +248,8 @@
             cta2: "See Services",
           },
           about: {
-            title: "About Kroni Ademit",
-            body: "Perched on a tranquil hill above Skënderaj, Kroni Ademit blends rural charm with modern comfort. Our kitchen focuses on local flavors and seasonal produce; our lawns and terraces invite slow conversations under big skies. Stay in our apartments, meet the horses, and explore the countryside — or turn the whole place into your private venue for weddings, birthdays, and special gatherings.",
+            title: `About ${BRAND}`,
+            body: "Perched on a tranquil hill above Skënderaj, Tebaca Adem blends rural charm with modern comfort. Our kitchen focuses on local flavors and seasonal produce; our lawns and terraces invite slow conversations under big skies. Stay in our apartments, meet the horses, and explore the countryside — or turn the whole place into your private venue for weddings, birthdays, and special gatherings.",
             f1: "Fresh & Local",
             f2: "Hilltop Views",
             f3: "Easy Booking",
@@ -294,16 +292,15 @@
           find: "Find Us",
           findSub: "Skënderaj, Kosovo — on the hill above town.",
           addressTitle: "Address & Hours",
-          addressText:
-            "Kroni Ademit, Skënderaj, Kosovo\nHilltop location with private parking.",
+          addressText: `Fazli Barani Skenderaj, Kuqice, Skënderaj 41000, Kosovo\nHilltop location with private parking.`,
           openMaps: "Open in Maps",
           contactUs: "Contact Us",
           openHours: "Open: Mon–Sun (call to confirm hours & events)",
           contactTitle: "Contact & Bookings",
           contactLead:
             "Planning a wedding or celebration? Want a weekend away? Reach out and we’ll make it easy.",
-          phoneLabel: "+383 00 000 000",
-          emailLabel: "info@kroniademit.com",
+          phoneLabel: "+38349700700",
+          emailLabel: "info@tebacaadem.com",
           formName: "Your name",
           formEmail: "Email",
           formPhone: "Phone (optional)",
@@ -315,15 +312,12 @@
       };
 
       const fmt = (s, map) => s.replace(/\{(\w+)\}/g, (_, k) => map[k] ?? "");
-
-      // Read initial lang from ?lang= or localStorage; default to Albanian (sq)
       const getInitialLang = () => {
         const url = new URL(window.location.href);
         const q = (url.searchParams.get("lang") || "").toLowerCase();
-        if (q && (q === "sq" || q === "hr" || q === "en")) return q;
+        if (["sq", "hr", "en"].includes(q)) return q;
         const saved = localStorage.getItem("lang");
-        if (saved && (saved === "sq" || saved === "hr" || saved === "en"))
-          return saved;
+        if (["sq", "hr", "en"].includes(saved)) return saved;
         return "sq";
       };
 
@@ -389,7 +383,7 @@
           <div className="max-w-6xl mx-auto px-4">
             <div className="flex items-center justify-between h-16">
               <a href="#" className="h1 text-xl text-stone-900">
-                Kroni <span className="text-brand-600">Ademit</span>
+                <span className="text-brand-600">Tebaca Adem</span>
               </a>
               <nav className="hidden md:flex gap-6 text-sm font-semibold text-stone-700">
                 <a href="#about" className="hover:text-brand-600">
@@ -427,7 +421,7 @@
                 {t.hero.title}
               </h1>
               <p className="mt-4 text-stone-600 text-lg">
-                {fmt(t.hero.lead, { brand: "Kroni Ademit" })}
+                {fmt(t.hero.lead, { brand: BRAND })}
               </p>
               <div className="mt-6 flex flex-wrap gap-3">
                 <a
@@ -447,7 +441,7 @@
             <div className="relative rounded-2xl overflow-hidden shadow-2xl">
               <img
                 src="images/slika1.jpg"
-                alt="Kroni Ademit grounds on a sunny day"
+                alt="Tebaca Adem grounds on a sunny day"
                 className="w-full h-[340px] object-cover"
               />
               <div className="absolute inset-0 ring-1 ring-black/5 pointer-events-none"></div>
@@ -523,33 +517,189 @@
         );
       };
 
-      const Gallery = ({ t }) => (
-        <section id="gallery" className="py-20">
-          <div className="max-w-6xl mx-auto px-4">
-            <h2 className="h1 text-3xl md:text-4xl text-stone-900 text-center">
-              {t.galleryTitle}
-            </h2>
-            <p className="mt-3 text-stone-600 text-center">{t.gallerySub}</p>
-            <div className="mt-10 grid md:grid-cols-3 gap-4">
-              <img
-                src="images/slika4.jpg"
-                alt="Terrace from above"
-                className="rounded-xl h-64 w-full object-cover"
-              />
-              <img
-                src="images/slika1.jpg"
-                alt="Garden paths and trees"
-                className="rounded-xl h-64 w-full object-cover"
-              />
-              <img
-                src="images/slika2.jpg"
-                alt="Facade and lawn at dusk"
-                className="rounded-xl h-64 w-full object-cover"
-              />
+      // --- GALLERY (all slika1..slika18) ---
+      const Gallery = ({ t }) => {
+        const files = Array.from(
+          { length: 17 },
+          (_, i) => `images/slika${i + 1}.jpg`
+        );
+        const first = files.slice(0, 3);
+        const rest = files.slice(3);
+
+        // --- Carousel state/refs ---
+        const trackRef = React.useRef(null);
+        const [active, setActive] = React.useState(0); // index in "rest"
+        const [itemW, setItemW] = React.useState(0);
+        const GAP = 12; // px, keep in sync with Tailwind gap-3
+
+        // Measure card width responsively
+        const measure = React.useCallback(() => {
+          const el = trackRef.current;
+          if (!el || !el.firstChild) return;
+          setItemW(el.firstChild.getBoundingClientRect().width);
+        }, []);
+
+        React.useEffect(() => {
+          measure();
+          const onResize = () => measure();
+          window.addEventListener("resize", onResize);
+          return () => window.removeEventListener("resize", onResize);
+        }, [measure]);
+
+        // Derive active index on scroll
+        const onScroll = React.useCallback(() => {
+          const el = trackRef.current;
+          if (!el || !itemW) return;
+          const raw = el.scrollLeft / (itemW + GAP);
+          setActive(Math.round(raw));
+        }, [itemW]);
+
+        React.useEffect(() => {
+          const el = trackRef.current;
+          if (!el) return;
+          el.addEventListener("scroll", onScroll, { passive: true });
+          return () => el.removeEventListener("scroll", onScroll);
+        }, [onScroll]);
+
+        // Helpers
+        const scrollToIndex = (i) => {
+          const el = trackRef.current;
+          if (!el || !itemW) return;
+          const clamped = Math.max(0, Math.min(rest.length - 1, i));
+          el.scrollTo({
+            left: clamped * (itemW + GAP),
+            behavior: "smooth",
+          });
+        };
+
+        const next = () => scrollToIndex(active + 1);
+        const prev = () => scrollToIndex(active - 1);
+
+        // Keyboard arrows
+        React.useEffect(() => {
+          const onKey = (e) => {
+            if (e.key === "ArrowRight") next();
+            if (e.key === "ArrowLeft") prev();
+          };
+          window.addEventListener("keydown", onKey);
+          return () => window.removeEventListener("keydown", onKey);
+        });
+        return (
+          <section id="gallery" className="py-20">
+            <div className="max-w-6xl mx-auto px-4">
+              <h2 className="h1 text-3xl md:text-4xl text-stone-900 text-center">
+                {t.galleryTitle}
+              </h2>
+              <p className="mt-3 text-stone-600 text-center">{t.gallerySub}</p>
+
+              {/* Top feature images */}
+              <div className="mt-10 grid md:grid-cols-3 gap-4">
+                {first.map((src) => (
+                  <img
+                    key={src}
+                    src={src}
+                    alt="Gallery"
+                    className="rounded-xl h-64 w-full object-cover transition-transform duration-300 hover:scale-[1.03]"
+                  />
+                ))}
+              </div>
+
+              {/* Carousel */}
+              <div className="mt-10 relative">
+                {/* Fade edges */}
+                <div className="pointer-events-none absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-white to-transparent"></div>
+                <div className="pointer-events-none absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-white to-transparent"></div>
+
+                {/* Track */}
+                <div
+                  ref={trackRef}
+                  className="
+              overflow-x-auto scroll-smooth snap-x snap-mandatory
+              [scrollbar-width:none] [&::-webkit-scrollbar]:hidden
+              "
+                  style={{ scrollPaddingLeft: "12px" }}
+                >
+                  <div className="flex gap-3 px-3">
+                    {rest.map((src, i) => (
+                      <div
+                        key={src}
+                        className="
+                    snap-center flex-none
+                    transition-transform duration-300
+                  "
+                        style={{
+                          // Card width: responsive and modern
+                          width: "clamp(220px, 36vw, 340px)",
+                        }}
+                      >
+                        <img
+                          src={src}
+                          alt="Gallery"
+                          className={`
+                      rounded-2xl h-48 w-full object-cover
+                      shadow-sm
+                      transition-all duration-300
+                      ${
+                        i === active
+                          ? "scale-[1.03] shadow-lg"
+                          : "opacity-90 hover:opacity-100 hover:scale-[1.02]"
+                      }
+                    `}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Arrows */}
+                {active > 0 && (
+                  <button
+                    onClick={prev}
+                    className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white shadow-lg rounded-full p-2 md:p-3"
+                    aria-label="Previous"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      className="w-5 h-5"
+                      fill="none"
+                      stroke="currentColor"
+                    >
+                      <path
+                        d="M15 18l-6-6 6-6"
+                        strokeWidth="1.8"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </button>
+                )}
+
+                {active < rest.length - 2 && (
+                  <button
+                    onClick={next}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white shadow-lg rounded-full p-2 md:p-3"
+                    aria-label="Next"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      className="w-5 h-5"
+                      fill="none"
+                      stroke="currentColor"
+                    >
+                      <path
+                        d="M9 6l6 6-6 6"
+                        strokeWidth="1.8"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </button>
+                )}
+              </div>
             </div>
-          </div>
-        </section>
-      );
+          </section>
+        );
+      };
 
       const MenuTeaser = ({ t }) => (
         <section
@@ -588,9 +738,10 @@
             <p className="mt-3 text-stone-600 text-center">{t.findSub}</p>
             <div className="mt-8 grid lg:grid-cols-2 gap-6">
               <div className="rounded-2xl overflow-hidden border border-stone-200">
+                {/* If you have the exact Maps link, send it and I'll swap it in */}
                 <iframe
-                  title="Kroni Ademit Map"
-                  src="https://www.google.com/maps?q=Kroni%20Ademit%20Sk%C3%ABnderaj&output=embed"
+                  title="Tebaca Adem Map"
+                  src="https://www.google.com/maps?q=Te%20Baca%20Adem%20Kuqic%C3%AB%20Sk%C3%ABnderaj&output=embed&z=11"
                   className="w-full h-[380px]"
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
@@ -608,7 +759,7 @@
                 </p>
                 <div className="mt-4 grid sm:grid-cols-2 gap-3">
                   <a
-                    href="https://www.google.com/maps?q=Kroni%20Ademit%20Sk%C3%ABnderaj"
+                    href="https://www.google.com/maps?q=Te%20Baca%20Adem%20Kuqic%C3%AB%20Sk%C3%ABnderaj"
                     target="_blank"
                     className="inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl border border-stone-200 hover:border-brand-400"
                   >
@@ -659,18 +810,20 @@
                       href="tel:+38300000000"
                       className="flex items-center gap-3 text-stone-800 hover:text-brand-600"
                     >
-                      {Icon.phone("w-5 h-5")} <span>{t.phoneLabel}</span>
+                      {Icon.phone("w-5 h-5")}
+                      <span>{t.phoneLabel}</span>
                     </a>
                     <a
-                      href="mailto:info@kroniademit.com"
+                      href="mailto:info@tebacaadem.com"
                       className="flex items-center gap-3 text-stone-800 hover:text-brand-600"
                     >
-                      {Icon.mail("w-5 h-5")} <span>{t.emailLabel}</span>
+                      {Icon.mail("w-5 h-5")}
+                      <span>{t.emailLabel}</span>
                     </a>
                   </div>
                 </div>
                 <form
-                  action="mailto:info@kroniademit.com"
+                  action="mailto:info@tebacaadem.com"
                   method="post"
                   className="grid grid-cols-1 gap-4"
                 >
@@ -707,23 +860,10 @@
       const LanguageDropdown = ({ lang, setLang }) => {
         const [open, setOpen] = React.useState(false);
         const opts = [
-          {
-            code: "sq",
-            label: "Shqip",
-            flag: "fi fi-al",
-          },
-          {
-            code: "hr",
-            label: "Hrvatski",
-            flag: "fi fi-hr",
-          },
-          {
-            code: "en",
-            label: "English",
-            flag: "fi fi-gb",
-          },
+          { code: "sq", label: "Shqip", flag: "fi fi-al" },
+          { code: "hr", label: "Hrvatski", flag: "fi fi-hr" },
+          { code: "en", label: "English", flag: "fi fi-gb" },
         ];
-
         const current = opts.find((o) => o.code === lang) || opts[0];
 
         const choose = (code) => {
@@ -735,7 +875,6 @@
           setOpen(false);
         };
 
-        // close when clicking outside
         React.useEffect(() => {
           const onClick = (e) => {
             if (!e.target.closest?.("#lang-dd")) setOpen(false);
@@ -763,7 +902,6 @@
                 <path strokeWidth="1.5" d="M6 9l6 6 6-6" />
               </svg>
             </button>
-
             {open && (
               <ul
                 role="listbox"
@@ -790,10 +928,10 @@
         );
       };
 
-      const Footer = ({ t }) => (
+      const Footer = () => (
         <footer className="py-10 border-t border-black/5">
           <div className="max-w-6xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-stone-600">
-            <p>© {new Date().getFullYear()} Kroni Ademit — Skënderaj</p>
+            <p>© {new Date().getFullYear()} Tebaca Adem — Skënderaj</p>
           </div>
         </footer>
       );
@@ -801,9 +939,7 @@
       const App = () => {
         const [lang, setLang] = React.useState(getInitialLang());
         const t = T[lang];
-
         React.useEffect(() => {
-          // save to localStorage and ensure URL param is set
           localStorage.setItem("lang", lang);
           const url = new URL(window.location.href);
           url.searchParams.set("lang", lang);
@@ -820,13 +956,12 @@
             <MenuTeaser t={t} />
             <Location t={t} />
             <Contact t={t} />
-            <Footer t={t} />
+            <Footer />
           </>
         );
       };
 
-      const root = ReactDOM.createRoot(document.getElementById("root"));
-      root.render(<App />);
+      ReactDOM.createRoot(document.getElementById("root")).render(<App />);
     </script>
   </body>
 </html>
