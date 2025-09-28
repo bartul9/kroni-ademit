@@ -27,7 +27,7 @@ export default function RootLayout({ children }) {
           rel="stylesheet"
         />
       </head>
-      <body className="antialiased bg-stone-50 text-stone-900">
+      <body className="antialiased">
         {children}
       </body>
     </html>
