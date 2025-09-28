@@ -1,26 +1,164 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  color-scheme: light;
+  --background: #fdf8f2;
+  --foreground: #1f2937;
+  --muted: #475569;
+  --muted-foreground: #64748b;
+  --surface: rgba(255, 255, 255, 0.78);
+  --card: rgba(255, 255, 255, 0.62);
+  --border: rgba(15, 23, 42, 0.12);
+  --accent: #10b981;
+  --accent-foreground: #064e3b;
+  --shadow-soft: 0 32px 90px -55px rgba(12, 74, 110, 0.35);
+  --background-gradient: radial-gradient(circle at 8% 12%, rgba(255, 188, 122, 0.18), transparent 55%),
+    radial-gradient(circle at 88% 0%, rgba(14, 165, 233, 0.16), transparent 62%),
+    radial-gradient(circle at 50% 120%, rgba(16, 185, 129, 0.14), transparent 58%);
+  --font-body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-heading: "Playfair Display", "Times New Roman", serif;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+[data-theme="dark"] {
+  color-scheme: dark;
+  --background: #05060d;
+  --foreground: #f4f4f5;
+  --muted: #e2e8f0;
+  --muted-foreground: #94a3b8;
+  --surface: rgba(13, 16, 28, 0.78);
+  --card: rgba(17, 21, 34, 0.68);
+  --border: rgba(148, 163, 184, 0.25);
+  --accent: #34d399;
+  --accent-foreground: #022c22;
+  --shadow-soft: 0 35px 90px -55px rgba(56, 189, 248, 0.45);
+  --background-gradient: radial-gradient(circle at 12% 18%, rgba(250, 204, 21, 0.08), transparent 55%),
+    radial-gradient(circle at 90% -10%, rgba(56, 189, 248, 0.18), transparent 62%),
+    radial-gradient(circle at 50% 120%, rgba(16, 185, 129, 0.2), transparent 60%);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
 }
 
 body {
   background: var(--background);
+  background-image: var(--background-gradient);
+  background-attachment: fixed;
+  background-size: cover;
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-body);
+  transition: background 0.45s ease, color 0.45s ease;
+}
+
+a {
+  color: inherit;
+}
+
+.heading-font {
+  font-family: var(--font-heading);
+}
+
+.section-title {
+  font-family: var(--font-heading);
+  letter-spacing: -0.01em;
+}
+
+.backdrop-card {
+  background: var(--surface);
+  backdrop-filter: blur(18px);
+  border: 1px solid var(--border);
+}
+
+.glass-card {
+  background: var(--card);
+  backdrop-filter: blur(18px);
+  border: 1px solid var(--border);
+  transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+}
+
+.glass-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 28px 80px -50px rgba(16, 185, 129, 0.55);
+}
+
+[data-theme="dark"] .glass-card:hover {
+  box-shadow: 0 28px 80px -48px rgba(59, 130, 246, 0.45);
+}
+
+.hero-gradient {
+  background-image: radial-gradient(circle at top left, rgba(16, 185, 129, 0.18), transparent 55%),
+    radial-gradient(circle at top right, rgba(59, 130, 246, 0.18), transparent 50%);
+}
+
+.card-border {
+  border: 1px solid var(--border);
+}
+
+.text-muted {
+  color: var(--muted-foreground);
+}
+
+.text-default {
+  color: var(--foreground);
+}
+
+.bg-surface {
+  background: var(--surface);
+}
+
+.bg-body {
+  background: var(--background);
+  background-image: var(--background-gradient);
+}
+
+.button-primary {
+  background: var(--accent);
+  color: white;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.button-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 20px 40px -24px rgba(16, 185, 129, 0.8);
+}
+
+.button-secondary {
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--foreground);
+  transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+
+.button-secondary:hover {
+  transform: translateY(-1px);
+  border-color: rgba(16, 185, 129, 0.4);
+  background: rgba(16, 185, 129, 0.08);
+}
+
+.header-glass {
+  backdrop-filter: blur(18px);
+  background: rgba(253, 251, 247, 0.82);
+  border-bottom: 1px solid var(--border);
+}
+
+[data-theme="dark"] .header-glass {
+  background: rgba(5, 7, 15, 0.78);
+}
+
+::selection {
+  background: rgba(16, 185, 129, 0.35);
+  color: #0b1120;
+}
+
+input,
+textarea,
+select {
+  color: var(--foreground);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, color 0.2s ease;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--muted-foreground);
+  opacity: 0.7;
 }
