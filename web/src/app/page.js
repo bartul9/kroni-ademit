@@ -1,14 +1,14 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 
 const BRAND = "Tebaca Adem";
 
 const LANGUAGES = [
-  { code: "sq", label: "SQ", name: "Shqip" },
-  { code: "hr", label: "HR", name: "Bosanski" },
-  { code: "en", label: "EN", name: "English" },
+  { code: "sq", label: "SQ", name: "Shqip", flag: "🇦🇱" },
+  { code: "hr", label: "HR", name: "Bosanski", flag: "🇧🇦" },
+  { code: "en", label: "EN", name: "English", flag: "🇬🇧" },
 ];
 
 const translations = {
@@ -438,6 +438,24 @@ const experienceImages = [
   },
 ];
 
+const stayImages = [
+  {
+    src: "https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=1400&q=80",
+    alt: "Boutique suite with natural light and greenery",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=1200&q=80",
+    alt: "Breakfast table with fresh pastries and coffee",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1521783988139-8930a4bfb6b9?auto=format&fit=crop&w=1200&q=80",
+    alt: "Horse rider on a countryside path",
+  },
+];
+
+const MAP_EMBED_URL =
+  "https://www.google.com/maps?q=Te%20Baca%20Adem%20Kuqic%C3%AB%20Sk%C3%ABnderaj&output=embed&z=12";
+
 const testimonials = [
   {
     quote:
@@ -540,37 +558,96 @@ function ThemeToggle({ theme, onChange }) {
 }
 
 function LanguageSwitcher({ lang, onChange }) {
+  const [open, setOpen] = useState(false);
+  const containerRef = useRef(null);
+  const selected = LANGUAGES.find((option) => option.code === lang) ?? LANGUAGES[0];
+
+  useEffect(() => {
+    if (!open) return;
+    function handleClick(event) {
+      if (!containerRef.current) return;
+      if (!containerRef.current.contains(event.target)) {
+        setOpen(false);
+      }
+    }
+    function handleEscape(event) {
+      if (event.key === "Escape") {
+        setOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClick);
+    document.addEventListener("touchstart", handleClick);
+    document.addEventListener("keydown", handleEscape);
+    return () => {
+      document.removeEventListener("mousedown", handleClick);
+      document.removeEventListener("touchstart", handleClick);
+      document.removeEventListener("keydown", handleEscape);
+    };
+  }, [open]);
+
+  useEffect(() => {
+    setOpen(false);
+  }, [lang]);
+
   return (
-    <label className="relative inline-flex items-center gap-2 text-sm font-medium text-muted">
-      <span className="sr-only">Select language</span>
-      <select
-        value={lang}
-        onChange={(event) => onChange(event.target.value)}
-        className="appearance-none rounded-full border border-[color:var(--border)] bg-surface px-4 py-2 pr-9 text-sm font-semibold text-default shadow-sm transition focus:outline-none focus:ring-2 focus:ring-emerald-400/60"
+    <div ref={containerRef} className="relative">
+      <button
+        type="button"
+        aria-haspopup="listbox"
+        aria-expanded={open}
+        onClick={() => setOpen((prev) => !prev)}
+        className="inline-flex items-center gap-2 rounded-full border border-[color:var(--border)] bg-surface px-3 py-2 text-sm font-semibold text-default shadow-sm transition hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-emerald-400/60"
       >
-        {LANGUAGES.map((option) => (
-          <option key={option.code} value={option.code}>
-            {option.label}
-          </option>
-        ))}
-      </select>
-      <svg
-        className="pointer-events-none absolute right-3 h-4 w-4 text-muted"
-        viewBox="0 0 20 20"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        aria-hidden
-      >
-        <path d="m6 8 4 4 4-4" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
-    </label>
+        <span className="text-lg leading-none">{selected.flag}</span>
+        <span className="hidden sm:inline">{selected.name}</span>
+        <svg
+          className={`h-4 w-4 text-muted transition ${open ? "rotate-180" : ""}`}
+          viewBox="0 0 20 20"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          aria-hidden
+        >
+          <path d="m6 8 4 4 4-4" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      </button>
+      {open ? (
+        <div className="absolute right-0 z-50 mt-3 w-52 overflow-hidden rounded-2xl border border-[color:var(--border)] bg-surface shadow-xl">
+          <ul role="listbox" className="grid divide-y divide-[color:var(--border)]">
+            {LANGUAGES.map((option) => {
+              const isActive = option.code === lang;
+              return (
+                <li key={option.code}>
+                  <button
+                    type="button"
+                    role="option"
+                    aria-selected={isActive}
+                    onClick={() => onChange(option.code)}
+                    className={`flex w-full items-center gap-3 px-4 py-3 text-left transition hover:bg-[rgba(16,185,129,0.12)] ${
+                      isActive ? "bg-[rgba(16,185,129,0.08)]" : ""
+                    }`}
+                  >
+                    <span className="text-lg leading-none">{option.flag}</span>
+                    <div className="min-w-0">
+                      <p className="text-sm font-semibold text-default">{option.name}</p>
+                      <p className="text-xs uppercase tracking-[0.4em] text-muted">{option.label}</p>
+                    </div>
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      ) : null}
+    </div>
   );
 }
 
-function SectionHeading({ eyebrow, title, description }) {
+function SectionHeading({ eyebrow, title, description, align = "center" }) {
+  const alignmentClass = align === "left" ? "text-left" : "text-center";
+  const containerWidth = align === "left" ? "max-w-2xl" : "max-w-3xl";
   return (
-    <div className="mx-auto max-w-3xl text-center">
+    <div className={`mx-auto ${containerWidth} ${alignmentClass}`}>
       {eyebrow ? (
         <span className="text-xs font-semibold uppercase tracking-[0.35em] text-emerald-500">
           {eyebrow}
@@ -584,6 +661,53 @@ function SectionHeading({ eyebrow, title, description }) {
       ) : null}
     </div>
   );
+}
+
+function ServiceIcon({ variant }) {
+  const index = variant % 4;
+  switch (index) {
+    case 0:
+      return (
+        <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+          <path
+            d="M12 5.25a4.75 4.75 0 0 0-4.75 4.75v.25h9.5V10a4.75 4.75 0 0 0-4.75-4.75Z"
+          />
+          <path d="M5 12.25h14" strokeLinecap="round" />
+          <path
+            d="M5.75 12.25h12.5v2.5a3 3 0 0 1-3 3H8.75a3 3 0 0 1-3-3v-2.5Z"
+          />
+          <path d="M12 3.75v1.5" strokeLinecap="round" />
+        </svg>
+      );
+    case 1:
+      return (
+        <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+          <circle cx="9" cy="9" r="3.25" />
+          <circle cx="15" cy="15" r="3.25" />
+          <path d="M7.75 16.25 5 19" strokeLinecap="round" />
+          <path d="m19 5-2.75 2.75" strokeLinecap="round" />
+          <path d="M14.5 5.5 16 3" strokeLinecap="round" />
+          <path d="M5 16.25 7.75 19" strokeLinecap="round" />
+        </svg>
+      );
+    case 2:
+      return (
+        <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+          <path d="M4.75 12.75h14.5a1.5 1.5 0 0 1 1.5 1.5v4.5H3.25v-4.5a1.5 1.5 0 0 1 1.5-1.5Z" />
+          <path d="M5.5 12.75V8.5A2.5 2.5 0 0 1 8 6h8a2.5 2.5 0 0 1 2.5 2.5v4.25" />
+          <path d="M3.25 18.75h17.5" strokeLinecap="round" />
+        </svg>
+      );
+    default:
+      return (
+        <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+          <path
+            d="M12 3.75c-1.8 1.5-3 3.7-3 6.25 0 4.28-3 6.25-3 6.25s2.5 2 6 2 6-2 6-2-3-2-3-6.25c0-2.55-1.2-4.75-3-6.25Z"
+          />
+          <path d="M8.5 20.25h7" strokeLinecap="round" />
+        </svg>
+      );
+  }
 }
 
 function AddressBlock({ title, addressText }) {
@@ -642,6 +766,10 @@ export default function Home() {
       },
     };
   }, [lang]);
+
+  const primaryService = t.services.items?.[0];
+  const secondaryServices = t.services.items?.slice(1) ?? [];
+  const heroFactHighlights = (t.hero.facts ?? []).slice(0, 2);
 
   return (
     <div className="relative flex min-h-screen flex-col bg-body">
@@ -779,23 +907,55 @@ export default function Home() {
 
         <section id="about" className="py-24">
           <div className="mx-auto max-w-6xl px-4 sm:px-6">
-            <div className="grid gap-16 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
-              <div>
-                <SectionHeading
-                  eyebrow={t.about.eyebrow}
-                  title={t.about.title}
-                  description={t.about.body}
-                />
-                <dl className="mt-12 grid gap-6 sm:grid-cols-3">
-                  {t.about.features.map((feature) => (
-                    <div key={feature.title} className="glass-card flex h-full flex-col rounded-3xl p-6 text-left">
-                      <h3 className="text-lg font-semibold text-default">{feature.title}</h3>
-                      <p className="mt-3 text-sm text-muted">{feature.detail}</p>
+            <div className="grid gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:items-stretch">
+              <div className="relative overflow-hidden rounded-[32px] border border-[color:var(--border)] bg-surface shadow-[0_35px_100px_-55px_rgba(12,74,110,0.65)]">
+                <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/18 via-transparent to-sky-500/24" />
+                <div className="relative z-10 flex h-full flex-col justify-between p-8 sm:p-12">
+                  <div className="space-y-8">
+                    <SectionHeading
+                      eyebrow={t.about.eyebrow}
+                      title={t.about.title}
+                      description={t.about.body}
+                      align="left"
+                    />
+                    <div className="mt-8 grid gap-4 sm:grid-cols-2">
+                      {t.about.features.map((feature, index) => (
+                        <div
+                          key={feature.title}
+                          className={`glass-card relative flex flex-col rounded-2xl border border-transparent p-6 text-left transition hover:border-emerald-400/40 hover:shadow-[0_20px_40px_-35px_rgba(16,185,129,0.8)] ${
+                            index === 2 ? "sm:col-span-2" : ""
+                          }`}
+                        >
+                          <div className="flex items-center gap-3">
+                            <span className="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-500/15 text-emerald-600">
+                              <svg className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                <path
+                                  fillRule="evenodd"
+                                  d="M16.704 5.29a1 1 0 0 1 .006 1.414l-7.071 7.142a1 1 0 0 1-1.42.006L3.296 9.92a1 1 0 0 1 1.408-1.42l4.103 4.058 6.364-6.336a1 1 0 0 1 1.533.068Z"
+                                  clipRule="evenodd"
+                                />
+                              </svg>
+                            </span>
+                            <h3 className="text-base font-semibold text-default">{feature.title}</h3>
+                          </div>
+                          <p className="mt-4 text-sm text-muted">{feature.detail}</p>
+                        </div>
+                      ))}
                     </div>
-                  ))}
-                </dl>
+                  </div>
+                  {heroFactHighlights.length ? (
+                    <div className="mt-10 grid gap-4 sm:grid-cols-2">
+                      {heroFactHighlights.map((fact) => (
+                        <div key={fact.label} className="glass-card rounded-2xl p-5 text-left text-default">
+                          <p className="text-2xl font-semibold">{fact.value}</p>
+                          <p className="mt-1 text-xs uppercase tracking-[0.35em] text-muted">{fact.label}</p>
+                        </div>
+                      ))}
+                    </div>
+                  ) : null}
+                </div>
               </div>
-              <div className="relative overflow-hidden rounded-3xl">
+              <div className="relative overflow-hidden rounded-[32px] border border-[color:var(--border)]">
                 <Image
                   src="https://images.unsplash.com/photo-1498654896293-37aacf113fd9?auto=format&fit=crop&w=1400&q=80"
                   alt="Countryside estate with lush greenery"
@@ -803,28 +963,76 @@ export default function Home() {
                   height={900}
                   className="h-full w-full object-cover"
                 />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
+                <div className="absolute bottom-6 left-6 right-6">
+                  <div className="glass-card flex flex-col gap-3 rounded-3xl p-6 text-white">
+                    <p className="text-xs font-semibold uppercase tracking-[0.35em] text-emerald-200/90">{t.nav.stay}</p>
+                    {t.stay.highlights.slice(0, 3).map((highlight) => (
+                      <p key={highlight} className="text-sm text-white/80">
+                        {highlight}
+                      </p>
+                    ))}
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </section>
 
         <section id="services" className="relative py-24">
-          <div className="absolute inset-0 -z-10 bg-gradient-to-br from-emerald-500/10 via-transparent to-sky-500/10" />
+          <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top,_rgba(16,185,129,0.16),_transparent_60%)]" />
           <div className="mx-auto max-w-6xl px-4 sm:px-6">
             <SectionHeading title={t.services.title} description={t.services.subtitle} />
-            <div className="mt-16 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {t.services.items.map((item) => (
-                <div key={item.title} className="glass-card flex h-full flex-col rounded-3xl p-6">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-600">
-                    <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                      <path d="M12 5.25v13.5" strokeLinecap="round" />
-                      <path d="M6.75 9.75h10.5" strokeLinecap="round" />
-                      <circle cx="12" cy="12" r="9.25" />
-                    </svg>
+            <div className="mt-16 grid gap-6 lg:grid-cols-4">
+              {primaryService ? (
+                <article className="relative overflow-hidden rounded-[30px] border border-[color:var(--border)] bg-surface shadow-[0_30px_80px_-45px_rgba(12,74,110,0.6)] lg:col-span-2">
+                  <div className="absolute inset-0">
+                    <Image
+                      src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1600&q=80"
+                      alt={primaryService.title}
+                      fill
+                      className="h-full w-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-br from-black/75 via-black/45 to-emerald-900/40" />
                   </div>
-                  <h3 className="mt-5 text-lg font-semibold text-default">{item.title}</h3>
-                  <p className="mt-3 text-sm text-muted">{item.description}</p>
-                </div>
+                  <div className="relative z-10 flex h-full flex-col justify-between p-8 sm:p-10">
+                    <div>
+                      <span className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.4em] text-white/90">
+                        {t.services.title}
+                      </span>
+                      <h3 className="heading-font mt-6 text-3xl font-semibold text-white">{primaryService.title}</h3>
+                      <p className="mt-4 max-w-xl text-sm leading-relaxed text-white/80 sm:text-base">
+                        {primaryService.description}
+                      </p>
+                    </div>
+                    <a
+                      href="#contact"
+                      className="mt-8 inline-flex w-fit items-center gap-2 rounded-full bg-white/15 px-5 py-2 text-sm font-semibold text-white transition hover:bg-white/25"
+                    >
+                      {t.nav.book}
+                      <svg className="h-4 w-4" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5">
+                        <path d="m8 5 5 5-5 5" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    </a>
+                  </div>
+                </article>
+              ) : null}
+              {secondaryServices.map((item, index) => (
+                <article
+                  key={item.title}
+                  className="group relative overflow-hidden rounded-[28px] border border-[color:var(--border)] bg-surface p-6 transition hover:-translate-y-1 hover:shadow-[0_25px_60px_-45px_rgba(12,74,110,0.65)]"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/[0.08] to-transparent opacity-0 transition group-hover:opacity-100" />
+                  <div className="relative z-10 flex h-full flex-col gap-4">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-emerald-500/15 text-emerald-600">
+                      <ServiceIcon variant={index + 1} />
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-semibold text-default">{item.title}</h3>
+                      <p className="mt-2 text-sm leading-relaxed text-muted">{item.description}</p>
+                    </div>
+                  </div>
+                </article>
               ))}
             </div>
           </div>
@@ -833,58 +1041,90 @@ export default function Home() {
         <section id="gallery" className="py-24">
           <div className="mx-auto max-w-6xl px-4 sm:px-6">
             <SectionHeading title={t.gallery.title} description={t.gallery.subtitle} />
-            <div className="mt-16 grid gap-6 md:grid-cols-2">
-              {galleryImages.map((image) => (
-                <div key={image.src} className="group relative overflow-hidden rounded-3xl">
-                  <Image
-                    src={image.src}
-                    alt={image.alt}
-                    width={1200}
-                    height={900}
-                    className="h-full w-full object-cover transition duration-700 group-hover:scale-105"
-                  />
-                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 transition group-hover:opacity-100" />
-                </div>
-              ))}
+            <div className="mt-16 grid auto-rows-[200px] gap-5 sm:auto-rows-[260px] lg:grid-cols-4">
+              {galleryImages.map((image, index) => {
+                const layout =
+                  index === 0
+                    ? "lg:col-span-2 lg:row-span-2"
+                    : index === galleryImages.length - 1
+                    ? "lg:col-span-2"
+                    : "";
+                return (
+                  <figure
+                    key={image.src}
+                    className={`group relative overflow-hidden rounded-[28px] border border-[color:var(--border)] ${layout}`}
+                  >
+                    <Image
+                      src={image.src}
+                      alt={image.alt}
+                      fill
+                      className="h-full w-full object-cover transition duration-700 group-hover:scale-105"
+                    />
+                    <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/40 via-black/10 to-transparent opacity-60 transition group-hover:opacity-80" />
+                    <figcaption className="absolute inset-x-5 bottom-5 rounded-2xl bg-black/40 px-4 py-3 text-sm text-white backdrop-blur">
+                      {image.alt}
+                    </figcaption>
+                  </figure>
+                );
+              })}
             </div>
           </div>
         </section>
 
         <section id="menu" className="relative py-24">
-          <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top,_rgba(16,185,129,0.15),_transparent_60%)]" />
+          <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top_right,_rgba(59,130,246,0.18),_transparent_60%)]" />
           <div className="mx-auto max-w-6xl px-4 sm:px-6">
-            <div className="grid gap-12 lg:grid-cols-[1fr_0.9fr] lg:items-center">
-              <div>
-                <SectionHeading title={t.menu.title} description={t.menu.body} />
-                <ul className="mt-10 space-y-3 text-base text-default">
-                  {t.menu.highlights.map((highlight) => (
-                    <li key={highlight} className="flex items-start gap-3 text-muted">
-                      <span className="mt-1 inline-flex h-2.5 w-2.5 flex-none rounded-full bg-emerald-500" />
-                      <span>{highlight}</span>
-                    </li>
-                  ))}
-                </ul>
-                <div className="mt-10 flex flex-wrap gap-4">
-                  <a href="tel:+38349700700" className="button-primary inline-flex items-center rounded-full px-6 py-3 text-sm font-semibold">
+            <div className="grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
+              <div className="space-y-8">
+                <SectionHeading title={t.menu.title} description={t.menu.body} align="left" />
+                <div className="rounded-[28px] border border-[color:var(--border)] bg-surface p-6 shadow-[0_24px_60px_-45px_rgba(59,130,246,0.45)]">
+                  <ul className="space-y-4 text-sm text-muted sm:text-base">
+                    {t.menu.highlights.map((highlight) => (
+                      <li key={highlight} className="flex items-start gap-3">
+                        <span className="mt-1 inline-flex h-2.5 w-2.5 flex-none rounded-full bg-emerald-500" />
+                        <span className="text-default">{highlight}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div className="flex flex-wrap gap-4">
+                  <a
+                    href="tel:+38349700700"
+                    className="button-primary inline-flex items-center rounded-full px-6 py-3 text-sm font-semibold"
+                  >
                     {t.ctas.reserve}
                   </a>
-                  <a href="#services" className="button-secondary inline-flex items-center rounded-full px-6 py-3 text-sm font-semibold">
+                  <a
+                    href="#services"
+                    className="button-secondary inline-flex items-center rounded-full px-6 py-3 text-sm font-semibold"
+                  >
                     {t.ctas.explore}
                   </a>
                 </div>
               </div>
-              <div className="grid gap-6">
-                {experienceImages.map((image) => (
-                  <div key={image.src} className="overflow-hidden rounded-3xl">
-                    <Image
-                      src={image.src}
-                      alt={image.alt}
-                      width={1200}
-                      height={900}
-                      className="h-full w-full object-cover"
-                    />
-                  </div>
-                ))}
+              <div className="relative">
+                <div className="absolute -inset-6 -z-10 rounded-[40px] bg-gradient-to-br from-emerald-500/25 via-transparent to-sky-500/35 blur-3xl" />
+                <div className="grid gap-4 sm:grid-cols-2">
+                  {experienceImages.map((image, index) => (
+                    <div
+                      key={image.src}
+                      className={`relative overflow-hidden rounded-[30px] border border-[color:var(--border)] ${
+                        index === 0 ? "sm:col-span-2 min-h-[260px]" : "min-h-[200px]"
+                      }`}
+                    >
+                      <Image
+                        src={image.src}
+                        alt={image.alt}
+                        fill
+                        className="h-full w-full object-cover"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+                      <div className="absolute bottom-4 left-4 right-4 rounded-2xl bg-black/45 px-4 py-3 text-sm text-white backdrop-blur">
+                        {image.alt}
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
@@ -892,58 +1132,93 @@ export default function Home() {
 
         <section id="stay" className="py-24">
           <div className="mx-auto max-w-6xl px-4 sm:px-6">
-            <div className="glass-card grid gap-8 rounded-3xl p-8 lg:grid-cols-[0.9fr_1.1fr] lg:p-12">
-              <div>
-                <SectionHeading title={t.stay.title} description={t.stay.body} />
-                <ul className="mt-10 space-y-3 text-sm text-muted">
+            <div className="grid gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
+              <div className="space-y-8">
+                <SectionHeading title={t.stay.title} description={t.stay.body} align="left" />
+                <div className="grid gap-3">
                   {t.stay.highlights.map((highlight) => (
-                    <li key={highlight} className="flex items-start gap-3">
-                      <svg
-                        className="mt-1 h-4 w-4 flex-none text-emerald-500"
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M16.704 5.29a1 1 0 0 1 .006 1.414l-7.071 7.142a1 1 0 0 1-1.42.006L3.296 9.92a1 1 0 0 1 1.408-1.42l4.103 4.058 6.364-6.336a1 1 0 0 1 1.533.068Z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                      <span>{highlight}</span>
-                    </li>
+                    <div
+                      key={highlight}
+                      className="flex items-start gap-3 rounded-2xl border border-[color:var(--border)] bg-surface px-5 py-4 text-sm text-muted"
+                    >
+                      <span className="mt-1 inline-flex h-6 w-6 flex-none items-center justify-center rounded-full bg-emerald-500/15 text-emerald-600">
+                        <svg className="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor">
+                          <path
+                            fillRule="evenodd"
+                            d="M16.704 5.29a1 1 0 0 1 .006 1.414l-7.071 7.142a1 1 0 0 1-1.42.006L3.296 9.92a1 1 0 0 1 1.408-1.42l4.103 4.058 6.364-6.336a1 1 0 0 1 1.533.068Z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                      </span>
+                      <span className="text-default">{highlight}</span>
+                    </div>
                   ))}
-                </ul>
+                </div>
+                <div className="flex flex-wrap gap-4">
+                  <a
+                    href="tel:+38349700700"
+                    className="button-primary inline-flex items-center rounded-full px-6 py-3 text-sm font-semibold"
+                  >
+                    {t.ctas.reserve}
+                  </a>
+                  <a
+                    href="#contact"
+                    className="button-secondary inline-flex items-center rounded-full px-6 py-3 text-sm font-semibold"
+                  >
+                    {t.nav.contact}
+                  </a>
+                </div>
               </div>
-              <div className="grid gap-4 sm:grid-cols-2">
-                <Image
-                  src="https://images.unsplash.com/photo-1505691723518-36a5ac3be353?auto=format&fit=crop&w=1200&q=80"
-                  alt="Boutique suite interior"
-                  width={900}
-                  height={900}
-                  className="h-full w-full rounded-2xl object-cover"
-                />
-                <Image
-                  src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=1200&q=80"
-                  alt="Breakfast setup with fresh bread"
-                  width={900}
-                  height={900}
-                  className="h-full w-full rounded-2xl object-cover"
-                />
+              <div className="relative">
+                <div className="absolute -inset-6 -z-10 rounded-[40px] bg-gradient-to-br from-emerald-500/22 via-transparent to-sky-500/30 blur-3xl" />
+                <div className="grid gap-4 sm:grid-cols-2">
+                  {stayImages.map((image, index) => (
+                    <div
+                      key={image.src}
+                      className={`relative overflow-hidden rounded-[30px] border border-[color:var(--border)] ${
+                        index === 0 ? "sm:col-span-2 min-h-[260px]" : "min-h-[200px]"
+                      }`}
+                    >
+                      <Image
+                        src={image.src}
+                        alt={image.alt}
+                        fill
+                        className="h-full w-full object-cover"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/20 to-transparent" />
+                      {index === 0 ? (
+                        <div className="absolute bottom-4 left-4 right-4 rounded-2xl bg-black/45 px-4 py-3 text-sm text-white backdrop-blur">
+                          {t.stay.title}
+                        </div>
+                      ) : null}
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
         </section>
 
         <section id="location" className="relative py-24">
-          <div className="absolute inset-0 -z-10 bg-gradient-to-tr from-sky-500/10 via-transparent to-emerald-500/10" />
+          <div className="absolute inset-0 -z-10 bg-gradient-to-tr from-sky-500/12 via-transparent to-emerald-500/12" />
           <div className="mx-auto max-w-6xl px-4 sm:px-6">
-            <div className="grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
-              <div>
-                <SectionHeading title={t.location.title} description={t.location.subtitle} />
-                <div className="mt-10 grid gap-6 sm:grid-cols-2">
+            <div className="grid gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:items-stretch">
+              <div className="relative overflow-hidden rounded-[32px] border border-[color:var(--border)] bg-surface shadow-[0_35px_100px_-55px_rgba(12,74,110,0.55)]">
+                <iframe
+                  title="Tebaca Adem map"
+                  src={MAP_EMBED_URL}
+                  className="h-full w-full min-h-[320px]"
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  allowFullScreen
+                />
+              </div>
+              <div className="space-y-8">
+                <SectionHeading title={t.location.title} description={t.location.subtitle} align="left" />
+                <div className="grid gap-6 sm:grid-cols-2">
                   <AddressBlock title={t.location.addressTitle} addressText={t.location.addressText} />
                   <div className="glass-card rounded-3xl p-6">
-                    <h3 className="text-lg font-semibold text-default">{t.contact.phoneLabel}</h3>
+                    <h3 className="text-lg font-semibold text-default">{t.contact.title}</h3>
                     <p className="mt-2 text-sm text-muted">{t.contact.lead}</p>
                     <div className="mt-5 space-y-2 text-sm text-muted">
                       <a href="tel:+38349700700" className="block font-semibold text-default">
@@ -965,25 +1240,17 @@ export default function Home() {
                   </div>
                 </div>
               </div>
-              <div className="overflow-hidden rounded-3xl">
-                <Image
-                  src="https://images.unsplash.com/photo-1445307806294-bff7f67ff225?auto=format&fit=crop&w=1400&q=80"
-                  alt="Aerial view of hills and countryside"
-                  width={1400}
-                  height={900}
-                  className="h-full w-full object-cover"
-                />
-              </div>
             </div>
           </div>
         </section>
 
-        <section id="contact" className="py-24">
+        <section id="contact" className="relative py-24">
+          <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_bottom,_rgba(16,185,129,0.18),_transparent_65%)]" />
           <div className="mx-auto max-w-6xl px-4 sm:px-6">
-            <div className="grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
-              <div>
-                <SectionHeading title={t.contact.title} description={t.contact.lead} />
-                <div className="mt-10 space-y-6">
+            <div className="grid gap-12 lg:grid-cols-[0.95fr_1.05fr] lg:items-start">
+              <div className="space-y-8">
+                <SectionHeading title={t.contact.title} description={t.contact.lead} align="left" />
+                <div className="grid gap-6">
                   <div className="glass-card rounded-3xl p-6">
                     <p className="text-sm text-muted">{t.location.openHours}</p>
                     <div className="mt-4 space-y-2 text-sm text-default">
@@ -995,17 +1262,17 @@ export default function Home() {
                       </a>
                     </div>
                   </div>
-                  <div className="grid gap-4">
+                  <div className="grid gap-4 sm:grid-cols-2">
                     {testimonials.map((testimonial) => (
                       <div key={testimonial.author} className="glass-card rounded-3xl p-6">
-                        <p className="text-base italic text-default">“{testimonial.quote}”</p>
-                        <p className="mt-4 text-sm font-semibold text-muted">{testimonial.author}</p>
+                        <p className="text-sm italic text-default sm:text-base">“{testimonial.quote}”</p>
+                        <p className="mt-4 text-xs font-semibold uppercase tracking-[0.3em] text-muted">{testimonial.author}</p>
                       </div>
                     ))}
                   </div>
                 </div>
               </div>
-              <form className="glass-card rounded-3xl p-8 shadow-lg">
+              <form className="rounded-[32px] border border-[color:var(--border)] bg-surface p-8 shadow-[0_35px_90px_-45px_rgba(16,185,129,0.45)] sm:p-10">
                 <div className="grid gap-6">
                   <div className="grid gap-2">
                     <label className="text-sm font-semibold text-default" htmlFor="name">
@@ -1013,9 +1280,10 @@ export default function Home() {
                     </label>
                     <input
                       id="name"
+                      name="name"
                       type="text"
                       placeholder={t.contact.form.name}
-                      className="w-full rounded-2xl border border-[color:var(--border)] bg-transparent px-4 py-3 text-sm text-default focus:border-emerald-400 focus:outline-none"
+                      className="w-full rounded-2xl border border-[color:var(--border)] bg-transparent px-4 py-3 text-sm text-default transition focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-300/40"
                     />
                   </div>
                   <div className="grid gap-2">
@@ -1024,9 +1292,10 @@ export default function Home() {
                     </label>
                     <input
                       id="email"
+                      name="email"
                       type="email"
                       placeholder="name@example.com"
-                      className="w-full rounded-2xl border border-[color:var(--border)] bg-transparent px-4 py-3 text-sm text-default focus:border-emerald-400 focus:outline-none"
+                      className="w-full rounded-2xl border border-[color:var(--border)] bg-transparent px-4 py-3 text-sm text-default transition focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-300/40"
                     />
                   </div>
                   <div className="grid gap-2">
@@ -1035,9 +1304,10 @@ export default function Home() {
                     </label>
                     <input
                       id="phone"
+                      name="phone"
                       type="tel"
                       placeholder="+383 49 700 700"
-                      className="w-full rounded-2xl border border-[color:var(--border)] bg-transparent px-4 py-3 text-sm text-default focus:border-emerald-400 focus:outline-none"
+                      className="w-full rounded-2xl border border-[color:var(--border)] bg-transparent px-4 py-3 text-sm text-default transition focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-300/40"
                     />
                   </div>
                   <div className="grid gap-2">
@@ -1046,8 +1316,9 @@ export default function Home() {
                     </label>
                     <textarea
                       id="message"
+                      name="message"
                       rows={4}
-                      className="w-full rounded-2xl border border-[color:var(--border)] bg-transparent px-4 py-3 text-sm text-default focus:border-emerald-400 focus:outline-none"
+                      className="w-full rounded-2xl border border-[color:var(--border)] bg-transparent px-4 py-3 text-sm text-default transition focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-300/40"
                       placeholder={t.contact.form.message}
                     />
                   </div>

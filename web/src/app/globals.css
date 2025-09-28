@@ -11,6 +11,7 @@
   --border: rgba(15, 23, 42, 0.12);
   --accent: #10b981;
   --accent-foreground: #064e3b;
+  --shadow-soft: 0 32px 90px -55px rgba(12, 74, 110, 0.35);
   --font-body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-heading: "Playfair Display", "Times New Roman", serif;
 }
@@ -21,11 +22,12 @@
   --foreground: #f4f4f5;
   --muted: #e2e8f0;
   --muted-foreground: #94a3b8;
-  --surface: rgba(10, 13, 26, 0.76);
-  --card: rgba(15, 17, 30, 0.68);
+  --surface: rgba(13, 16, 28, 0.78);
+  --card: rgba(17, 21, 34, 0.68);
   --border: rgba(148, 163, 184, 0.25);
   --accent: #34d399;
   --accent-foreground: #022c22;
+  --shadow-soft: 0 35px 90px -55px rgba(56, 189, 248, 0.45);
 }
 
 html {
@@ -62,6 +64,16 @@ a {
   background: var(--card);
   backdrop-filter: blur(18px);
   border: 1px solid var(--border);
+  transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+}
+
+.glass-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 28px 80px -50px rgba(16, 185, 129, 0.55);
+}
+
+[data-theme="dark"] .glass-card:hover {
+  box-shadow: 0 28px 80px -48px rgba(59, 130, 246, 0.45);
 }
 
 .hero-gradient {
@@ -126,4 +138,17 @@ a {
 ::selection {
   background: rgba(16, 185, 129, 0.35);
   color: #0b1120;
+}
+
+input,
+textarea,
+select {
+  color: var(--foreground);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, color 0.2s ease;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--muted-foreground);
+  opacity: 0.7;
 }
