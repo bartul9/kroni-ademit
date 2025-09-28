@@ -868,7 +868,7 @@ export default function Home() {
             <div className="absolute inset-0 bg-gradient-to-br from-black/70 via-black/50 to-emerald-900/20" />
           </div>
           <div className="relative">
-            <div className="mx-auto flex max-w-6xl flex-col gap-12 px-4 pb-24 pt-32 sm:px-6 lg:flex-row lg:items-end">
+            <div className="mx-auto flex max-w-6xl flex-col gap-10 px-4 pb-20 pt-28 sm:px-6 sm:pb-24 sm:pt-36 lg:flex-row lg:items-end">
               <div className="max-w-2xl text-white">
                 <p className="text-xs font-semibold uppercase tracking-[0.5em] text-emerald-200/90">
                   Hilltop Restaurant · Skënderaj
@@ -892,7 +892,7 @@ export default function Home() {
                   </a>
                 </div>
               </div>
-              <div className="glass-card grid w-full max-w-lg grid-cols-2 gap-4 rounded-3xl p-6 text-white">
+              <div className="glass-card grid w-full max-w-lg grid-cols-2 gap-4 rounded-3xl p-6 text-white sm:grid-cols-4">
                 {t.hero.facts.map((fact) => (
                   <div key={fact.label}>
                     <p className="text-3xl font-semibold">{fact.value}</p>
@@ -905,20 +905,20 @@ export default function Home() {
           <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[color:var(--background)] to-transparent" />
         </section>
 
-        <section id="about" className="py-24">
+        <section id="about" className="py-20 sm:py-24">
           <div className="mx-auto max-w-6xl px-4 sm:px-6">
-            <div className="grid gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:items-stretch">
+            <div className="grid gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-stretch">
               <div className="relative overflow-hidden rounded-[32px] border border-[color:var(--border)] bg-surface shadow-[0_35px_100px_-55px_rgba(12,74,110,0.65)]">
                 <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/18 via-transparent to-sky-500/24" />
                 <div className="relative z-10 flex h-full flex-col justify-between p-8 sm:p-12">
-                  <div className="space-y-8">
+                  <div className="space-y-7">
                     <SectionHeading
                       eyebrow={t.about.eyebrow}
                       title={t.about.title}
                       description={t.about.body}
                       align="left"
                     />
-                    <div className="mt-8 grid gap-4 sm:grid-cols-2">
+                    <div className="mt-6 grid gap-4 sm:grid-cols-2">
                       {t.about.features.map((feature, index) => (
                         <div
                           key={feature.title}
@@ -944,7 +944,7 @@ export default function Home() {
                     </div>
                   </div>
                   {heroFactHighlights.length ? (
-                    <div className="mt-10 grid gap-4 sm:grid-cols-2">
+                    <div className="mt-8 grid gap-4 sm:grid-cols-2">
                       {heroFactHighlights.map((fact) => (
                         <div key={fact.label} className="glass-card rounded-2xl p-5 text-left text-default">
                           <p className="text-2xl font-semibold">{fact.value}</p>
@@ -979,11 +979,11 @@ export default function Home() {
           </div>
         </section>
 
-        <section id="services" className="relative py-24">
+        <section id="services" className="relative py-20 sm:py-24">
           <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top,_rgba(16,185,129,0.16),_transparent_60%)]" />
           <div className="mx-auto max-w-6xl px-4 sm:px-6">
             <SectionHeading title={t.services.title} description={t.services.subtitle} />
-            <div className="mt-16 grid gap-6 lg:grid-cols-4">
+            <div className="mt-12 grid gap-6 sm:gap-7 lg:grid-cols-4">
               {primaryService ? (
                 <article className="relative overflow-hidden rounded-[30px] border border-[color:var(--border)] bg-surface shadow-[0_30px_80px_-45px_rgba(12,74,110,0.6)] lg:col-span-2">
                   <div className="absolute inset-0">
@@ -1038,10 +1038,10 @@ export default function Home() {
           </div>
         </section>
 
-        <section id="gallery" className="py-24">
+        <section id="gallery" className="py-20 sm:py-24">
           <div className="mx-auto max-w-6xl px-4 sm:px-6">
             <SectionHeading title={t.gallery.title} description={t.gallery.subtitle} />
-            <div className="mt-16 grid auto-rows-[200px] gap-5 sm:auto-rows-[260px] lg:grid-cols-4">
+            <div className="mt-12 grid auto-rows-[200px] gap-5 sm:mt-16 sm:auto-rows-[260px] lg:grid-cols-4">
               {galleryImages.map((image, index) => {
                 const layout =
                   index === 0
@@ -1071,11 +1071,11 @@ export default function Home() {
           </div>
         </section>
 
-        <section id="menu" className="relative py-24">
+        <section id="menu" className="relative py-20 sm:py-24">
           <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top_right,_rgba(59,130,246,0.18),_transparent_60%)]" />
           <div className="mx-auto max-w-6xl px-4 sm:px-6">
-            <div className="grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
-              <div className="space-y-8">
+            <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
+              <div className="space-y-7">
                 <SectionHeading title={t.menu.title} description={t.menu.body} align="left" />
                 <div className="rounded-[28px] border border-[color:var(--border)] bg-surface p-6 shadow-[0_24px_60px_-45px_rgba(59,130,246,0.45)]">
                   <ul className="space-y-4 text-sm text-muted sm:text-base">
@@ -1130,10 +1130,10 @@ export default function Home() {
           </div>
         </section>
 
-        <section id="stay" className="py-24">
+        <section id="stay" className="py-20 sm:py-24">
           <div className="mx-auto max-w-6xl px-4 sm:px-6">
-            <div className="grid gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
-              <div className="space-y-8">
+            <div className="grid gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:gap-12">
+              <div className="space-y-7">
                 <SectionHeading title={t.stay.title} description={t.stay.body} align="left" />
                 <div className="grid gap-3">
                   {t.stay.highlights.map((highlight) => (
@@ -1199,10 +1199,10 @@ export default function Home() {
           </div>
         </section>
 
-        <section id="location" className="relative py-24">
+        <section id="location" className="relative py-20 sm:py-24">
           <div className="absolute inset-0 -z-10 bg-gradient-to-tr from-sky-500/12 via-transparent to-emerald-500/12" />
           <div className="mx-auto max-w-6xl px-4 sm:px-6">
-            <div className="grid gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:items-stretch">
+            <div className="grid gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-stretch">
               <div className="relative overflow-hidden rounded-[32px] border border-[color:var(--border)] bg-surface shadow-[0_35px_100px_-55px_rgba(12,74,110,0.55)]">
                 <iframe
                   title="Tebaca Adem map"
@@ -1213,7 +1213,7 @@ export default function Home() {
                   allowFullScreen
                 />
               </div>
-              <div className="space-y-8">
+              <div className="space-y-7">
                 <SectionHeading title={t.location.title} description={t.location.subtitle} align="left" />
                 <div className="grid gap-6 sm:grid-cols-2">
                   <AddressBlock title={t.location.addressTitle} addressText={t.location.addressText} />
@@ -1244,11 +1244,11 @@ export default function Home() {
           </div>
         </section>
 
-        <section id="contact" className="relative py-24">
+        <section id="contact" className="relative py-20 sm:py-24">
           <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_bottom,_rgba(16,185,129,0.18),_transparent_65%)]" />
           <div className="mx-auto max-w-6xl px-4 sm:px-6">
-            <div className="grid gap-12 lg:grid-cols-[0.95fr_1.05fr] lg:items-start">
-              <div className="space-y-8">
+            <div className="grid gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:items-start">
+              <div className="space-y-7">
                 <SectionHeading title={t.contact.title} description={t.contact.lead} align="left" />
                 <div className="grid gap-6">
                   <div className="glass-card rounded-3xl p-6">

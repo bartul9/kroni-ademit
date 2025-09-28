@@ -2,7 +2,7 @@
 
 :root {
   color-scheme: light;
-  --background: #fdfbf7;
+  --background: #fdf8f2;
   --foreground: #1f2937;
   --muted: #475569;
   --muted-foreground: #64748b;
@@ -12,13 +12,16 @@
   --accent: #10b981;
   --accent-foreground: #064e3b;
   --shadow-soft: 0 32px 90px -55px rgba(12, 74, 110, 0.35);
+  --background-gradient: radial-gradient(circle at 8% 12%, rgba(255, 188, 122, 0.18), transparent 55%),
+    radial-gradient(circle at 88% 0%, rgba(14, 165, 233, 0.16), transparent 62%),
+    radial-gradient(circle at 50% 120%, rgba(16, 185, 129, 0.14), transparent 58%);
   --font-body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-heading: "Playfair Display", "Times New Roman", serif;
 }
 
 [data-theme="dark"] {
   color-scheme: dark;
-  --background: #05070f;
+  --background: #05060d;
   --foreground: #f4f4f5;
   --muted: #e2e8f0;
   --muted-foreground: #94a3b8;
@@ -28,6 +31,9 @@
   --accent: #34d399;
   --accent-foreground: #022c22;
   --shadow-soft: 0 35px 90px -55px rgba(56, 189, 248, 0.45);
+  --background-gradient: radial-gradient(circle at 12% 18%, rgba(250, 204, 21, 0.08), transparent 55%),
+    radial-gradient(circle at 90% -10%, rgba(56, 189, 248, 0.18), transparent 62%),
+    radial-gradient(circle at 50% 120%, rgba(16, 185, 129, 0.2), transparent 60%);
 }
 
 html {
@@ -36,6 +42,9 @@ html {
 
 body {
   background: var(--background);
+  background-image: var(--background-gradient);
+  background-attachment: fixed;
+  background-size: cover;
   color: var(--foreground);
   font-family: var(--font-body);
   transition: background 0.45s ease, color 0.45s ease;
@@ -99,6 +108,7 @@ a {
 
 .bg-body {
   background: var(--background);
+  background-image: var(--background-gradient);
 }
 
 .button-primary {
