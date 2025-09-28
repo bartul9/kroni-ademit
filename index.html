@@ -312,6 +312,7 @@
       };
 
       const fmt = (s, map) => s.replace(/\{(\w+)\}/g, (_, k) => map[k] ?? "");
+      const toTelHref = (label) => `tel:${label.replace(/[^+\d]/g, "")}`;
       const getInitialLang = () => {
         const url = new URL(window.location.href);
         const q = (url.searchParams.get("lang") || "").toLowerCase();
@@ -350,6 +351,25 @@
             <path strokeWidth="1.5" d="m3 6 9 6 9-6" />
           </svg>
         ),
+        calendar: (cls = "w-5 h-5") => (
+          <svg
+            className={cls}
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+          >
+            <rect
+              x="3.75"
+              y="4.5"
+              width="16.5"
+              height="15"
+              rx="1.5"
+              strokeWidth="1.5"
+            />
+            <path strokeWidth="1.5" d="M7.5 3.75v3m9-3v3m-12 3h15" />
+            <path strokeWidth="1.5" d="m8.25 13.5 2.25 2.25 5.25-5.25" />
+          </svg>
+        ),
         map: (cls = "w-5 h-5") => (
           <svg
             className={cls}
@@ -376,140 +396,367 @@
             />
           </svg>
         ),
+        arrow: (cls = "w-5 h-5") => (
+          <svg
+            className={cls}
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+          >
+            <path
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M7.5 16.5 16.5 7.5m0 0h-6m6 0v6"
+            />
+          </svg>
+        ),
       };
 
-      const Nav = ({ t, lang, setLang }) => (
-        <header className="fixed top-0 inset-x-0 z-50 backdrop-blur bg-white/60 border-b border-black/5">
-          <div className="max-w-6xl mx-auto px-4">
-            <div className="flex items-center justify-between h-16">
-              <a href="#" className="h1 text-xl text-stone-900">
-                <span className="text-brand-600">Tebaca Adem</span>
-              </a>
-              <nav className="hidden md:flex gap-6 text-sm font-semibold text-stone-700">
-                <a href="#about" className="hover:text-brand-600">
-                  {t.nav.about}
-                </a>
-                <a href="#services" className="hover:text-brand-600">
-                  {t.nav.services}
-                </a>
-                <a href="#gallery" className="hover:text-brand-600">
-                  {t.nav.gallery}
-                </a>
-                <a href="#menu" className="hover:text-brand-600">
-                  {t.nav.menu}
-                </a>
-                <a href="#location" className="hover:text-brand-600">
-                  {t.nav.location}
-                </a>
-                <a href="#contact" className="hover:text-brand-600">
-                  {t.nav.contact}
-                </a>
-              </nav>
-              <div className="flex items-center gap-3">
-                <LanguageDropdown lang={lang} setLang={setLang} />
-              </div>
-            </div>
-          </div>
-        </header>
-      );
+      const Nav = ({ t, lang, setLang }) => {
+        const [open, setOpen] = React.useState(false);
+        const links = [
+          { id: "about", label: t.nav.about },
+          { id: "services", label: t.nav.services },
+          { id: "gallery", label: t.nav.gallery },
+          { id: "menu", label: t.nav.menu },
+          { id: "location", label: t.nav.location },
+          { id: "contact", label: t.nav.contact },
+        ];
 
-      const Hero = ({ t }) => (
-        <section className="pt-28 md:pt-32 bg-hero-grad">
-          <div className="max-w-6xl mx-auto px-4 grid md:grid-cols-2 gap-10 items-center">
-            <div>
-              <h1 className="h1 text-4xl md:text-5xl leading-tight text-stone-900">
-                {t.hero.title}
-              </h1>
-              <p className="mt-4 text-stone-600 text-lg">
-                {fmt(t.hero.lead, { brand: BRAND })}
-              </p>
-              <div className="mt-6 flex flex-wrap gap-3">
-                <a
-                  href="#contact"
-                  className="px-5 py-3 rounded-xl bg-brand-500 text-white font-semibold shadow-glow hover:translate-y-[-1px] transition"
-                >
-                  {t.hero.cta1}
+        React.useEffect(() => {
+          const onResize = () => {
+            if (window.innerWidth >= 1024) setOpen(false);
+          };
+          window.addEventListener("resize", onResize);
+          return () => window.removeEventListener("resize", onResize);
+        }, []);
+
+        const close = () => setOpen(false);
+
+        return (
+          <header className="fixed top-0 inset-x-0 z-50 border-b border-white/60 bg-white/70 backdrop-blur-xl">
+            <div className="max-w-7xl mx-auto px-4">
+              <div className="flex items-center justify-between h-16">
+                <a href="#" className="h1 text-xl text-stone-900">
+                  <span className="inline-flex items-center gap-2">
+                    <span className="inline-block h-2 w-2 rounded-full bg-brand-500"></span>
+                    Tebaca Adem
+                  </span>
                 </a>
-                <a
-                  href="#services"
-                  className="px-5 py-3 rounded-xl border border-stone-200 text-stone-800 font-semibold hover:border-brand-400 hover:text-brand-700 transition"
-                >
-                  {t.hero.cta2}
-                </a>
+                <nav className="hidden lg:flex items-center gap-8 text-sm font-semibold text-stone-700">
+                  {links.map((link) => (
+                    <a key={link.id} href={`#${link.id}`} className="group relative transition hover:text-brand-600">
+                      {link.label}
+                      <span className="absolute left-0 -bottom-1 h-[2px] w-full scale-x-0 transform bg-brand-500 transition-transform duration-300 group-hover:scale-x-100"></span>
+                    </a>
+                  ))}
+                </nav>
+                <div className="hidden lg:flex items-center gap-3">
+                  <LanguageDropdown lang={lang} setLang={setLang} />
+                  <a
+                    href="#contact"
+                    className="inline-flex items-center gap-2 rounded-full bg-stone-900 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-brand-500/20 transition hover:bg-brand-600"
+                  >
+                    {t.nav.book}
+                    {Icon.arrow("w-4 h-4")}
+                  </a>
+                </div>
+                <div className="flex items-center gap-3 lg:hidden">
+                  <LanguageDropdown lang={lang} setLang={setLang} />
+                  <button
+                    onClick={() => setOpen((v) => !v)}
+                    className="inline-flex items-center justify-center rounded-full border border-stone-300 bg-white p-2 text-stone-700 shadow-sm"
+                    aria-label="Toggle navigation"
+                  >
+                    {open ? (
+                      <svg viewBox="0 0 24 24" className="w-5 h-5" fill="none" stroke="currentColor">
+                        <path strokeWidth="1.5" strokeLinecap="round" d="M7 7l10 10M17 7 7 17" />
+                      </svg>
+                    ) : (
+                      <svg viewBox="0 0 24 24" className="w-5 h-5" fill="none" stroke="currentColor">
+                        <path strokeWidth="1.5" strokeLinecap="round" d="M4 7h16M4 12h16M4 17h16" />
+                      </svg>
+                    )}
+                  </button>
+                </div>
               </div>
             </div>
-            <div className="relative rounded-2xl overflow-hidden shadow-2xl">
-              <img
-                src="images/slika1.jpg"
-                alt="Tebaca Adem grounds on a sunny day"
-                className="w-full h-[340px] object-cover"
-              />
-              <div className="absolute inset-0 ring-1 ring-black/5 pointer-events-none"></div>
+            {open && (
+              <div className="lg:hidden">
+                <div className="mx-4 mt-2 rounded-3xl border border-white/70 bg-white/95 p-6 shadow-xl shadow-brand-500/10">
+                  <nav className="flex flex-col gap-3 text-base font-semibold text-stone-800">
+                    {links.map((link) => (
+                      <a
+                        key={link.id}
+                        href={`#${link.id}`}
+                        onClick={close}
+                        className="rounded-2xl px-4 py-3 transition hover:bg-stone-100"
+                      >
+                        {link.label}
+                      </a>
+                    ))}
+                  </nav>
+                  <a
+                    href="#contact"
+                    onClick={close}
+                    className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-stone-900 px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-brand-500/20 transition hover:bg-brand-600"
+                  >
+                    {t.nav.book}
+                    {Icon.arrow("w-4 h-4")}
+                  </a>
+                </div>
+              </div>
+            )}
+          </header>
+        );
+      };
+
+      const Hero = ({ t }) => {
+        const highlights = [
+          { icon: Icon.spark, label: t.about.f1 },
+          { icon: Icon.map, label: t.about.f2 },
+          { icon: Icon.phone, label: t.about.f3 },
+        ];
+
+        return (
+          <section className="relative overflow-hidden pt-28 pb-24 sm:pt-36">
+            <div className="absolute inset-0 -z-20 bg-hero-grad"></div>
+            <div className="absolute -top-40 -left-20 h-[420px] w-[420px] -z-10 rounded-full bg-brand-500/20 blur-3xl"></div>
+            <div className="absolute -top-28 right-[-160px] h-[480px] w-[480px] -z-10 rounded-full bg-indigo-400/20 blur-3xl"></div>
+            <div className="max-w-7xl mx-auto px-4">
+              <div className="grid items-center gap-12 lg:grid-cols-[1.08fr,0.92fr]">
+                <div className="relative z-10">
+                  <span className="inline-flex items-center gap-2 rounded-full bg-white/70 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.28em] text-stone-600 shadow ring-1 ring-white/60 backdrop-blur">
+                    {t.servicesTitle} • {BRAND}
+                  </span>
+                  <h1 className="h1 mt-6 text-4xl leading-tight text-stone-950 sm:text-5xl lg:text-[56px] lg:leading-[1.05]">
+                    {t.hero.title}
+                  </h1>
+                  <p className="mt-6 max-w-xl text-lg text-stone-600 sm:text-xl">
+                    {fmt(t.hero.lead, { brand: BRAND })}
+                  </p>
+                  <div className="mt-8 flex flex-wrap gap-3">
+                    <a
+                      href="#contact"
+                      className="inline-flex items-center gap-3 rounded-full bg-stone-900 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-brand-500/20 transition hover:-translate-y-0.5 hover:bg-brand-600"
+                    >
+                      {t.hero.cta1}
+                      {Icon.arrow("w-4 h-4")}
+                    </a>
+                    <a
+                      href="#services"
+                      className="inline-flex items-center gap-3 rounded-full border border-stone-300 bg-white/80 px-6 py-3 text-sm font-semibold text-stone-800 shadow-sm transition hover:border-brand-400 hover:text-brand-600"
+                    >
+                      {t.hero.cta2}
+                    </a>
+                  </div>
+
+                  <div className="mt-10 grid gap-3 sm:grid-cols-3">
+                    {highlights.map((item) => (
+                      <Feature key={item.label} icon={item.icon} title={item.label} />
+                    ))}
+                  </div>
+
+                  <div className="mt-10 grid gap-4 sm:grid-cols-2">
+                    <div className="rounded-3xl border border-white/70 bg-white/80 p-5 shadow-lg shadow-brand-500/10 backdrop-blur">
+                      <div className="flex items-center gap-3 text-sm font-semibold text-stone-700">
+                        {Icon.calendar("w-5 h-5 text-brand-500")}
+                        <span>{t.openHours}</span>
+                      </div>
+                    </div>
+                    <div className="rounded-3xl border border-white/70 bg-white/80 p-5 shadow-lg shadow-brand-500/10 backdrop-blur">
+                      <div className="text-[11px] font-semibold uppercase tracking-[0.28em] text-stone-500">
+                        {t.nav.contact}
+                      </div>
+                      <div className="mt-3 flex flex-col gap-2 text-sm font-semibold text-stone-800">
+                        <a
+                          href={toTelHref(t.phoneLabel)}
+                          className="inline-flex items-center gap-2 rounded-full bg-white/90 px-3 py-2 text-stone-800 transition hover:text-brand-600"
+                        >
+                          {Icon.phone("w-4 h-4 text-brand-500")}
+                          {t.phoneLabel}
+                        </a>
+                        <a
+                          href="#location"
+                          className="inline-flex items-center gap-2 rounded-full px-3 py-2 text-stone-700 transition hover:text-brand-600"
+                        >
+                          {Icon.map("w-4 h-4 text-brand-500")}
+                          {t.findSub}
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="relative">
+                  <div className="absolute -top-8 -left-8 h-40 w-40 rounded-full bg-white/50 blur-2xl"></div>
+                  <div className="relative grid gap-4 sm:grid-cols-2">
+                    <div className="sm:col-span-2 overflow-hidden rounded-[44px] shadow-2xl shadow-stone-900/10 ring-1 ring-black/5">
+                      <img
+                        src="images/slika1.jpg"
+                        alt="Tebaca Adem terrace with panoramic views"
+                        className="h-[320px] w-full object-cover sm:h-[360px]"
+                      />
+                    </div>
+                    <div className="overflow-hidden rounded-[32px] shadow-xl shadow-stone-900/10 ring-1 ring-black/5">
+                      <img
+                        src="images/slika4.jpg"
+                        alt="Guests enjoying local dishes"
+                        className="h-[200px] w-full object-cover"
+                      />
+                    </div>
+                    <div className="rounded-[32px] border border-white/70 bg-white/80 p-6 shadow-xl shadow-brand-500/10 backdrop-blur">
+                      <h3 className="font-semibold text-stone-900">{t.servicesSub}</h3>
+                      <p className="mt-2 text-sm text-stone-600">
+                        {t.menuTitle}
+                      </p>
+                      <a
+                        href="#menu"
+                        className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-brand-600 transition hover:text-brand-500"
+                      >
+                        {t.hero.cta2}
+                        {Icon.arrow("w-4 h-4 text-brand-500")}
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
-          </div>
-        </section>
-      );
+          </section>
+        );
+      };
 
       const Feature = ({ icon, title }) => (
-        <div className="flex items-center gap-3 p-3 rounded-xl border border-stone-200">
-          {icon("w-5 h-5 text-brand-600")}
+        <div className="flex items-center gap-3 rounded-2xl border border-white/70 bg-white/80 px-4 py-3 shadow-sm shadow-brand-500/10 backdrop-blur">
+          <span className="inline-flex h-9 w-9 items-center justify-center rounded-2xl bg-brand-500/10 text-brand-600">
+            {icon("w-4 h-4")}
+          </span>
           <span className="font-semibold text-stone-800">{title}</span>
         </div>
       );
 
-      const About = ({ t }) => (
-        <section id="about" className="py-20">
-          <div className="max-w-6xl mx-auto px-4 grid md:grid-cols-2 gap-10 items-center">
-            <div className="rounded-2xl overflow-hidden">
-              <img
-                src="images/slika2.jpg"
-                alt="Restaurant facade at dusk"
-                className="w-full h-[360px] object-cover"
-              />
-            </div>
-            <div>
-              <h2 className="h1 text-3xl md:text-4xl text-stone-900">
-                {t.about.title}
-              </h2>
-              <p className="mt-4 text-stone-700 leading-relaxed">
-                {t.about.body}
-              </p>
-              <div className="mt-6 grid sm:grid-cols-3 gap-3">
-                <Feature icon={Icon.spark} title={t.about.f1} />
-                <Feature icon={Icon.map} title={t.about.f2} />
-                <Feature icon={Icon.phone} title={t.about.f3} />
+      const About = ({ t }) => {
+        const aboutHighlights = [
+          { icon: Icon.spark, title: t.about.f1, desc: t.services?.[0]?.desc },
+          { icon: Icon.map, title: t.about.f2, desc: t.findSub },
+          { icon: Icon.phone, title: t.about.f3, desc: t.contactLead },
+        ];
+
+        return (
+          <section id="about" className="relative py-24">
+            <div className="absolute inset-x-0 top-0 -z-10 h-full bg-gradient-to-b from-white via-slate-50 to-white"></div>
+            <div className="max-w-7xl mx-auto px-4">
+              <div className="grid items-center gap-12 lg:grid-cols-[0.9fr,1.1fr]">
+                <div className="relative order-2 lg:order-1">
+                  <div className="rounded-[36px] border border-white/70 bg-white/80 p-8 shadow-xl shadow-brand-500/10 backdrop-blur">
+                    <h2 className="h1 text-3xl text-stone-900 sm:text-4xl">
+                      {t.about.title}
+                    </h2>
+                    <p className="mt-6 text-base leading-relaxed text-stone-700 sm:text-lg">
+                      {t.about.body}
+                    </p>
+                    <div className="mt-10 space-y-4">
+                      {aboutHighlights.map((item) => (
+                        <div
+                          key={item.title}
+                          className="flex items-start gap-4 rounded-3xl border border-white/70 bg-white/90 px-5 py-4 shadow-sm shadow-brand-500/10 backdrop-blur"
+                        >
+                          <span className="mt-1 inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-brand-500/10 text-brand-600">
+                            {item.icon("w-5 h-5")}
+                          </span>
+                          <div>
+                            <h3 className="font-semibold text-stone-900">{item.title}</h3>
+                            {item.desc && (
+                              <p className="mt-1 text-sm text-stone-600">{item.desc}</p>
+                            )}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+                <div className="relative order-1 lg:order-2">
+                  <div className="absolute -top-16 -right-12 h-44 w-44 rounded-full bg-brand-500/10 blur-2xl"></div>
+                  <div className="relative grid gap-4 sm:grid-cols-2">
+                    <div className="sm:row-span-2 overflow-hidden rounded-[40px] shadow-2xl shadow-stone-900/10 ring-1 ring-black/5">
+                      <img
+                        src="images/slika2.jpg"
+                        alt="Warm lighting inside the Tebaca Adem dining room"
+                        className="h-[460px] w-full object-cover"
+                      />
+                    </div>
+                    <div className="overflow-hidden rounded-[32px] shadow-xl shadow-stone-900/10 ring-1 ring-black/5">
+                      <img
+                        src="images/slika6.jpg"
+                        alt="Apartment interior ready for guests"
+                        className="h-[220px] w-full object-cover"
+                      />
+                    </div>
+                    <div className="rounded-[32px] border border-white/70 bg-white/80 p-6 shadow-xl shadow-brand-500/10 backdrop-blur">
+                      <p className="text-sm text-stone-600">
+                        {t.menuBody}
+                      </p>
+                      <div className="mt-4 flex items-center gap-2 text-sm font-semibold text-stone-700">
+                        <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-brand-500/10 text-brand-600">
+                          {Icon.spark("w-4 h-4")}
+                        </span>
+                        {BRAND}
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        </section>
-      );
+          </section>
+        );
+      };
 
       const Services = ({ t }) => {
         const emojis = ["🍽️", "🎉", "🛏️", "🐎", "🌿"];
         return (
-          <section
-            id="services"
-            className="py-20 bg-gradient-to-b from-white to-slate-50"
-          >
-            <div className="max-w-6xl mx-auto px-4">
-              <h2 className="h1 text-3xl md:text-4xl text-stone-900 text-center">
-                {t.servicesTitle}
-              </h2>
-              <p className="mt-3 text-stone-600 text-center max-w-2xl mx-auto">
-                {t.servicesSub}
-              </p>
-              <div className="mt-10 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <section id="services" className="relative overflow-hidden py-24">
+            <div className="absolute inset-0 -z-20 bg-gradient-to-b from-white via-slate-100 to-white"></div>
+            <div className="absolute -top-32 left-1/2 -z-10 h-[520px] w-[520px] -translate-x-1/2 rounded-full bg-brand-500/10 blur-3xl"></div>
+            <div className="max-w-7xl mx-auto px-4">
+              <div className="flex flex-col gap-6 text-center lg:flex-row lg:items-end lg:justify-between lg:text-left">
+                <div className="mx-auto max-w-2xl lg:mx-0">
+                  <h2 className="h1 text-3xl text-stone-900 sm:text-4xl">
+                    {t.servicesTitle}
+                  </h2>
+                  <p className="mt-4 text-base text-stone-600 sm:text-lg">
+                    {t.servicesSub}
+                  </p>
+                </div>
+                <a
+                  href="#contact"
+                  className="inline-flex items-center justify-center gap-2 self-center rounded-full border border-stone-300 bg-white/80 px-5 py-3 text-sm font-semibold text-stone-800 shadow-sm transition hover:border-brand-400 hover:text-brand-600"
+                >
+                  {t.nav.book}
+                  {Icon.arrow("w-4 h-4 text-brand-500")}
+                </a>
+              </div>
+              <div className="mt-12 grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
                 {t.services.map((it, idx) => (
-                  <div
+                  <article
                     key={it.title}
-                    className="p-6 rounded-2xl border border-stone-200 bg-white shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition"
+                    className="group relative overflow-hidden rounded-3xl border border-white/70 bg-white/80 p-6 shadow-xl shadow-brand-500/10 backdrop-blur transition duration-300 hover:-translate-y-1 hover:shadow-2xl"
                   >
-                    <div className="text-3xl">{emojis[idx]}</div>
-                    <h3 className="mt-3 font-bold text-lg text-stone-900">
+                    <div className="absolute inset-0 bg-gradient-to-br from-brand-500/0 via-brand-500/5 to-brand-500/20 opacity-0 transition duration-300 group-hover:opacity-100"></div>
+                    <div className="relative z-10 flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-500/10 text-2xl">
+                      {emojis[idx]}
+                    </div>
+                    <h3 className="relative z-10 mt-5 text-xl font-semibold text-stone-900">
                       {it.title}
                     </h3>
-                    <p className="mt-2 text-stone-600">{it.desc}</p>
-                  </div>
+                    <p className="relative z-10 mt-3 text-sm text-stone-600">
+                      {it.desc}
+                    </p>
+                    <div className="relative z-10 mt-6 inline-flex items-center gap-2 text-sm font-semibold text-brand-600">
+                      {t.hero.cta2}
+                      {Icon.arrow("w-4 h-4 text-brand-500")}
+                    </div>
+                  </article>
                 ))}
               </div>
             </div>
@@ -585,116 +832,106 @@
           return () => window.removeEventListener("keydown", onKey);
         });
         return (
-          <section id="gallery" className="py-20">
-            <div className="max-w-6xl mx-auto px-4">
-              <h2 className="h1 text-3xl md:text-4xl text-stone-900 text-center">
-                {t.galleryTitle}
-              </h2>
-              <p className="mt-3 text-stone-600 text-center">{t.gallerySub}</p>
-
-              {/* Top feature images */}
-              <div className="mt-10 grid md:grid-cols-3 gap-4">
-                {first.map((src) => (
-                  <img
-                    key={src}
-                    src={src}
-                    alt="Gallery"
-                    className="rounded-xl h-64 w-full object-cover transition-transform duration-300 hover:scale-[1.03]"
-                  />
-                ))}
+          <section id="gallery" className="relative overflow-hidden py-24">
+            <div className="absolute inset-0 -z-20 bg-slate-950"></div>
+            <div className="absolute -top-48 left-1/2 -z-10 h-[520px] w-[520px] -translate-x-1/2 rounded-full bg-brand-500/20 blur-3xl"></div>
+            <div className="absolute bottom-[-180px] right-[-120px] -z-10 h-[420px] w-[420px] rounded-full bg-indigo-500/20 blur-3xl"></div>
+            <div className="relative max-w-7xl mx-auto px-4 text-slate-100">
+              <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
+                <div>
+                  <h2 className="h1 text-3xl sm:text-4xl">{t.galleryTitle}</h2>
+                  <p className="mt-3 max-w-2xl text-slate-300">{t.gallerySub}</p>
+                </div>
+                <a
+                  href="#contact"
+                  className="inline-flex items-center gap-2 self-start rounded-full border border-white/20 bg-white/10 px-5 py-2 text-sm font-semibold text-slate-100 transition hover:border-white/40 hover:bg-white/20"
+                >
+                  {t.contactUs}
+                  {Icon.arrow("w-4 h-4")}
+                </a>
               </div>
 
-              {/* Carousel */}
-              <div className="mt-10 relative">
-                {/* Fade edges */}
-                <div className="pointer-events-none absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-white to-transparent"></div>
-                <div className="pointer-events-none absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-white to-transparent"></div>
+              <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                {first.map((src, idx) => {
+                  const tall = idx === 0;
+                  return (
+                    <div
+                      key={src}
+                      className={`relative overflow-hidden rounded-[32px] border border-white/10 bg-white/5 shadow-2xl shadow-black/20 ${
+                        tall ? "sm:row-span-2 lg:row-span-2" : ""
+                      }`}
+                    >
+                      <img
+                        src={src}
+                        alt="Gallery"
+                        className={`w-full object-cover transition-transform duration-500 ease-out hover:scale-[1.05] ${
+                          tall ? "h-[340px] sm:h-[420px]" : "h-[220px]"
+                        }`}
+                      />
+                      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
+                    </div>
+                  );
+                })}
+              </div>
 
-                {/* Track */}
-                <div
-                  ref={trackRef}
-                  className="
-              overflow-x-auto scroll-smooth snap-x snap-mandatory
-              [scrollbar-width:none] [&::-webkit-scrollbar]:hidden
-              "
-                  style={{ scrollPaddingLeft: "12px" }}
-                >
-                  <div className="flex gap-3 px-3">
-                    {rest.map((src, i) => (
-                      <div
-                        key={src}
-                        className="
-                    snap-center flex-none
-                    transition-transform duration-300
-                  "
-                        style={{
-                          // Card width: responsive and modern
-                          width: "clamp(220px, 36vw, 340px)",
-                        }}
-                      >
-                        <img
-                          src={src}
-                          alt="Gallery"
-                          className={`
-                      rounded-2xl h-48 w-full object-cover
-                      shadow-sm
-                      transition-all duration-300
-                      ${
-                        i === active
-                          ? "scale-[1.03] shadow-lg"
-                          : "opacity-90 hover:opacity-100 hover:scale-[1.02]"
-                      }
-                    `}
-                        />
-                      </div>
-                    ))}
+              <div className="mt-12 rounded-[36px] border border-white/10 bg-white/5 p-6 backdrop-blur">
+                <div className="relative">
+                  <div className="pointer-events-none absolute inset-y-0 left-0 w-20 bg-gradient-to-r from-slate-950 via-slate-950/70 to-transparent"></div>
+                  <div className="pointer-events-none absolute inset-y-0 right-0 w-20 bg-gradient-to-l from-slate-950 via-slate-950/70 to-transparent"></div>
+
+                  <div
+                    ref={trackRef}
+                    className="overflow-x-auto scroll-smooth snap-x snap-mandatory [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+                    style={{ scrollPaddingLeft: "12px" }}
+                  >
+                    <div className="flex gap-4 px-3">
+                      {rest.map((src, i) => (
+                        <div
+                          key={src}
+                          className="snap-center flex-none transition-transform duration-300"
+                          style={{ width: "clamp(220px, 36vw, 340px)" }}
+                        >
+                          <img
+                            src={src}
+                            alt="Gallery"
+                            className={`h-48 w-full rounded-3xl object-cover shadow-lg shadow-black/30 transition-all duration-300 ${
+                              i === active
+                                ? "scale-[1.05]"
+                                : "opacity-80 hover:opacity-100 hover:scale-[1.03]"
+                            }`}
+                          />
+                        </div>
+                      ))}
+                    </div>
                   </div>
+
+                  {active > 0 && (
+                    <button
+                      onClick={prev}
+                      className="absolute left-3 top-1/2 -translate-y-1/2 rounded-full border border-white/20 bg-white/10 p-2 text-slate-100 shadow-lg backdrop-blur transition hover:bg-white/20"
+                      aria-label="Previous"
+                    >
+                      <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor">
+                        <path d="M15 18l-6-6 6-6" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" />
+                      </svg>
+                    </button>
+                  )}
+
+                  {active < rest.length - 2 && (
+                    <button
+                      onClick={next}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full border border-white/20 bg-white/10 p-2 text-slate-100 shadow-lg backdrop-blur transition hover:bg-white/20"
+                      aria-label="Next"
+                    >
+                      <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor">
+                        <path d="M9 6l6 6-6 6" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" />
+                      </svg>
+                    </button>
+                  )}
                 </div>
-
-                {/* Arrows */}
-                {active > 0 && (
-                  <button
-                    onClick={prev}
-                    className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white shadow-lg rounded-full p-2 md:p-3"
-                    aria-label="Previous"
-                  >
-                    <svg
-                      viewBox="0 0 24 24"
-                      className="w-5 h-5"
-                      fill="none"
-                      stroke="currentColor"
-                    >
-                      <path
-                        d="M15 18l-6-6 6-6"
-                        strokeWidth="1.8"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  </button>
-                )}
-
-                {active < rest.length - 2 && (
-                  <button
-                    onClick={next}
-                    className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white shadow-lg rounded-full p-2 md:p-3"
-                    aria-label="Next"
-                  >
-                    <svg
-                      viewBox="0 0 24 24"
-                      className="w-5 h-5"
-                      fill="none"
-                      stroke="currentColor"
-                    >
-                      <path
-                        d="M9 6l6 6-6 6"
-                        strokeWidth="1.8"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  </button>
-                )}
+                <div className="mt-6 text-right text-xs font-semibold uppercase tracking-[0.3em] text-slate-400">
+                  {String(active + 1).padStart(2, "0")} / {String(rest.length).padStart(2, "0")}
+                </div>
               </div>
             </div>
           </section>
@@ -702,92 +939,129 @@
       };
 
       const MenuTeaser = ({ t }) => (
-        <section
-          id="menu"
-          className="py-20 bg-gradient-to-b from-slate-50 to-white"
-        >
-          <div className="max-w-6xl mx-auto px-4 grid md:grid-cols-2 gap-10 items-center">
-            <div className="rounded-2xl overflow-hidden shadow-lg">
-              <img
-                src="images/slika3.jpg"
-                alt="Village-style mixed grill platter"
-                className="w-full h-[360px] object-cover"
-              />
-            </div>
-            <div>
-              <h2 className="h1 text-3xl md:text-4xl text-stone-900">
-                {t.menuTitle}
-              </h2>
-              <p className="mt-4 text-stone-700">{t.menuBody}</p>
-              <ul className="mt-4 space-y-2 text-stone-700">
-                {t.menuItems.map((item) => (
-                  <li key={item}>• {item}</li>
-                ))}
-              </ul>
+        <section id="menu" className="relative overflow-hidden py-24">
+          <div className="absolute inset-0 -z-20 bg-gradient-to-br from-slate-900 via-slate-950 to-black"></div>
+          <div className="absolute -left-32 -top-32 -z-10 h-[420px] w-[420px] rounded-full bg-brand-500/20 blur-3xl"></div>
+          <div className="absolute bottom-[-180px] right-[-160px] -z-10 h-[460px] w-[460px] rounded-full bg-indigo-500/20 blur-3xl"></div>
+          <div className="relative max-w-7xl mx-auto px-4 text-slate-100">
+            <div className="grid items-center gap-12 lg:grid-cols-[0.9fr,1.1fr]">
+              <div className="order-2 lg:order-1">
+                <div className="rounded-[36px] border border-white/10 bg-white/5 p-8 sm:p-10 shadow-2xl shadow-black/40 backdrop-blur">
+                  <h2 className="h1 text-3xl text-white sm:text-4xl">{t.menuTitle}</h2>
+                  <p className="mt-5 text-base text-slate-300 sm:text-lg">{t.menuBody}</p>
+                  <div className="mt-6 flex flex-wrap gap-3">
+                    {t.menuItems.map((item) => (
+                      <span
+                        key={item}
+                        className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 py-2 text-sm font-medium text-slate-100"
+                      >
+                        <span className="h-2 w-2 rounded-full bg-brand-400"></span>
+                        {item}
+                      </span>
+                    ))}
+                  </div>
+                  <div className="mt-8 flex flex-wrap gap-3">
+                    <a
+                      href="#contact"
+                      className="inline-flex items-center gap-3 rounded-full bg-white px-6 py-3 text-sm font-semibold text-slate-900 shadow-lg shadow-black/40 transition hover:-translate-y-0.5 hover:bg-slate-200"
+                    >
+                      {t.hero.cta1}
+                      {Icon.arrow("w-4 h-4")}
+                    </a>
+                    <a
+                      href="#services"
+                      className="inline-flex items-center gap-3 rounded-full border border-white/20 bg-white/10 px-6 py-3 text-sm font-semibold text-slate-100 transition hover:border-white/40 hover:bg-white/20"
+                    >
+                      {t.hero.cta2}
+                    </a>
+                  </div>
+                </div>
+              </div>
+              <div className="relative order-1 lg:order-2">
+                <div className="overflow-hidden rounded-[40px] border border-white/10 bg-white/5 shadow-2xl shadow-black/50">
+                  <img
+                    src="images/slika3.jpg"
+                    alt="Signature platter ready to share"
+                    className="h-[420px] w-full object-cover"
+                  />
+                  <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent p-6 text-sm text-slate-200">
+                    {t.services?.[0]?.desc}
+                  </div>
+                </div>
+                <div className="absolute -bottom-10 right-6 hidden w-48 rounded-3xl border border-white/20 bg-white/10 p-4 text-xs font-semibold text-slate-100 shadow-xl shadow-black/40 backdrop-blur sm:flex sm:flex-col sm:gap-2">
+                  <span className="text-[10px] uppercase tracking-[0.35em] text-slate-300">{t.nav.location}</span>
+                  <span>{t.findSub}</span>
+                  <a
+                    href="https://www.google.com/maps?q=Te%20Baca%20Adem%20Kuqic%C3%AB%20Sk%C3%ABnderaj"
+                    target="_blank"
+                    className="inline-flex items-center gap-2 text-[11px] text-brand-200 transition hover:text-brand-100"
+                  >
+                    {t.openMaps}
+                    {Icon.arrow("w-3.5 h-3.5")}
+                  </a>
+                </div>
+              </div>
             </div>
           </div>
         </section>
       );
 
       const Location = ({ t }) => (
-        <section id="location" className="py-20">
-          <div className="max-w-6xl mx-auto px-4">
-            <h2 className="h1 text-3xl md:text-4xl text-stone-900 text-center">
-              {t.find}
-            </h2>
-            <p className="mt-3 text-stone-600 text-center">{t.findSub}</p>
-            <div className="mt-8 grid lg:grid-cols-2 gap-6">
-              <div className="rounded-2xl overflow-hidden border border-stone-200">
-                {/* If you have the exact Maps link, send it and I'll swap it in */}
+        <section id="location" className="relative overflow-hidden py-24">
+          <div className="absolute inset-0 -z-20 bg-gradient-to-b from-white via-slate-50 to-white"></div>
+          <div className="absolute -top-24 right-[-120px] -z-10 h-[420px] w-[420px] rounded-full bg-brand-500/15 blur-3xl"></div>
+          <div className="absolute bottom-[-180px] left-[-140px] -z-10 h-[460px] w-[460px] rounded-full bg-sky-300/20 blur-3xl"></div>
+          <div className="relative max-w-7xl mx-auto px-4">
+            <div className="flex flex-col gap-6 text-center lg:flex-row lg:items-end lg:justify-between lg:text-left">
+              <div className="mx-auto max-w-2xl lg:mx-0">
+                <h2 className="h1 text-3xl text-stone-900 sm:text-4xl">{t.find}</h2>
+                <p className="mt-3 text-base text-stone-600 sm:text-lg">{t.findSub}</p>
+              </div>
+              <a
+                href="https://www.google.com/maps?q=Te%20Baca%20Adem%20Kuqic%C3%AB%20Sk%C3%ABnderaj"
+                target="_blank"
+                className="inline-flex items-center justify-center gap-2 self-center rounded-full border border-stone-300 bg-white/80 px-5 py-3 text-sm font-semibold text-stone-800 shadow-sm transition hover:border-brand-400 hover:text-brand-600"
+              >
+                {t.openMaps}
+                {Icon.arrow("w-4 h-4 text-brand-500")}
+              </a>
+            </div>
+
+            <div className="mt-12 grid gap-8 lg:grid-cols-[1.1fr,0.9fr]">
+              <div className="relative overflow-hidden rounded-[36px] border border-white/80 bg-white shadow-xl shadow-brand-500/10">
                 <iframe
                   title="Tebaca Adem Map"
-                  src="https://www.google.com/maps?q=Te%20Baca%20Adem%20Kuqic%C3%AB%20Sk%C3%ABnderaj&output=embed&z=11"
-                  className="w-full h-[380px]"
+                  src="https://www.google.com/maps?q=Te%20Baca%20Adem%20Kuqic%C3%AB%20Sk%C3%ABnderaj&output=embed&z=12"
+                  className="h-[420px] w-full"
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
                 ></iframe>
               </div>
-              <div className="p-6 rounded-2xl border border-stone-200 bg-white">
-                <h3 className="font-bold text-xl text-stone-900">
-                  {t.addressTitle}
-                </h3>
-                <p
-                  className="mt-3 text-stone-700"
-                  style={{ whiteSpace: "pre-line" }}
-                >
-                  {t.addressText}
-                </p>
-                <div className="mt-4 grid sm:grid-cols-2 gap-3">
+              <div className="rounded-[32px] border border-white/80 bg-white/90 p-8 shadow-xl shadow-brand-500/10 backdrop-blur">
+                <h3 className="text-xl font-semibold text-stone-900">{t.addressTitle}</h3>
+                <p className="mt-3 whitespace-pre-line text-stone-600">{t.addressText}</p>
+                <div className="mt-6 grid gap-3 sm:grid-cols-2">
+                  <a
+                    href="#contact"
+                    className="inline-flex items-center justify-center gap-2 rounded-2xl bg-brand-500 px-4 py-3 text-sm font-semibold text-white shadow-brand-500/30 transition hover:bg-brand-600"
+                  >
+                    {t.contactUs}
+                    {Icon.arrow("w-4 h-4")}
+                  </a>
                   <a
                     href="https://www.google.com/maps?q=Te%20Baca%20Adem%20Kuqic%C3%AB%20Sk%C3%ABnderaj"
                     target="_blank"
-                    className="inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl border border-stone-200 hover:border-brand-400"
+                    className="inline-flex items-center justify-center gap-2 rounded-2xl border border-stone-300 bg-white px-4 py-3 text-sm font-semibold text-stone-800 transition hover:border-brand-400 hover:text-brand-600"
                   >
-                    <svg
-                      className="w-5 h-5"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeWidth="1.5"
-                        d="M12 21s-6.75-6.223-6.75-11.25A6.75 6.75 0 1 1 18.75 9.75C18.75 14.777 12 21 12 21Z"
-                      />
-                      <circle cx="12" cy="9.75" r="2.25" strokeWidth="1.5" />
-                    </svg>
+                    {Icon.map("w-4 h-4 text-brand-500")}
                     {t.openMaps}
                   </a>
-                  <a
-                    href="#contact"
-                    className="inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-brand-500 text-white hover:opacity-90"
-                  >
-                    {t.contactUs}
-                  </a>
                 </div>
-                <div className="mt-4 text-stone-700">
-                  <p>
-                    <strong>{t.openHours}</strong>
-                  </p>
+                <div className="mt-6 rounded-2xl border border-white/80 bg-white/90 p-4 text-sm text-stone-700 shadow-sm shadow-brand-500/10">
+                  <div className="flex items-center gap-2 font-semibold text-stone-800">
+                    {Icon.calendar("w-4 h-4 text-brand-500")}
+                    {t.openHours}
+                  </div>
                 </div>
               </div>
             </div>
@@ -796,62 +1070,78 @@
       );
 
       const Contact = ({ t }) => (
-        <section id="contact" className="py-20 bg-slate-50">
-          <div className="max-w-6xl mx-auto px-4">
-            <div className="rounded-2xl border border-stone-200 bg-white p-8 md:p-10">
-              <div className="grid md:grid-cols-2 gap-10">
-                <div>
-                  <h2 className="h1 text-3xl md:text-4xl text-stone-900">
-                    {t.contactTitle}
-                  </h2>
-                  <p className="mt-4 text-stone-700">{t.contactLead}</p>
-                  <div className="mt-6 space-y-3">
+        <section id="contact" className="relative overflow-hidden py-24">
+          <div className="absolute inset-0 -z-20 bg-gradient-to-br from-slate-900 via-slate-950 to-black"></div>
+          <div className="absolute -left-28 -top-24 -z-10 h-[420px] w-[420px] rounded-full bg-brand-500/25 blur-3xl"></div>
+          <div className="absolute bottom-[-180px] right-[-160px] -z-10 h-[460px] w-[460px] rounded-full bg-indigo-500/30 blur-3xl"></div>
+          <div className="relative max-w-7xl mx-auto px-4 text-slate-100">
+            <div className="grid items-center gap-12 lg:grid-cols-[0.85fr,1.15fr]">
+              <div className="order-2 lg:order-1">
+                <div className="rounded-[36px] border border-white/15 bg-white/10 p-8 sm:p-10 shadow-2xl shadow-black/40 backdrop-blur">
+                  <h2 className="h1 text-3xl text-white sm:text-4xl">{t.contactTitle}</h2>
+                  <p className="mt-5 text-base text-slate-300 sm:text-lg">{t.contactLead}</p>
+                  <div className="mt-8 space-y-4">
                     <a
-                      href="tel:+38300000000"
-                      className="flex items-center gap-3 text-stone-800 hover:text-brand-600"
+                      href={toTelHref(t.phoneLabel)}
+                      className="group flex items-center gap-3 rounded-2xl border border-white/10 bg-white/10 px-4 py-3 text-sm font-semibold text-slate-100 transition hover:border-white/30 hover:bg-white/20"
                     >
-                      {Icon.phone("w-5 h-5")}
-                      <span>{t.phoneLabel}</span>
+                      <span className="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-brand-500/20 text-brand-200">
+                        {Icon.phone("w-5 h-5")}
+                      </span>
+                      {t.phoneLabel}
                     </a>
                     <a
                       href="mailto:info@tebacaadem.com"
-                      className="flex items-center gap-3 text-stone-800 hover:text-brand-600"
+                      className="group flex items-center gap-3 rounded-2xl border border-white/10 bg-white/10 px-4 py-3 text-sm font-semibold text-slate-100 transition hover:border-white/30 hover:bg-white/20"
                     >
-                      {Icon.mail("w-5 h-5")}
-                      <span>{t.emailLabel}</span>
+                      <span className="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-brand-500/20 text-brand-200">
+                        {Icon.mail("w-5 h-5")}
+                      </span>
+                      {t.emailLabel}
                     </a>
                   </div>
+                  <div className="mt-8 rounded-2xl border border-white/15 bg-white/10 p-4 text-sm text-slate-200 shadow-brand-500/10">
+                    <div className="flex items-center gap-3 font-semibold text-slate-100">
+                      {Icon.calendar("w-4 h-4")}
+                      {t.openHours}
+                    </div>
+                  </div>
                 </div>
-                <form
-                  action="mailto:info@tebacaadem.com"
-                  method="post"
-                  className="grid grid-cols-1 gap-4"
-                >
+              </div>
+              <form
+                action="mailto:info@tebacaadem.com"
+                method="post"
+                className="order-1 rounded-[36px] border border-white/10 bg-white p-8 shadow-2xl shadow-black/30 backdrop-blur lg:order-2"
+              >
+                <div className="grid gap-4">
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    <input
+                      className="w-full rounded-2xl border border-stone-200 px-4 py-3 text-stone-800 shadow-sm transition focus:border-brand-400 focus:outline-none focus:ring-2 focus:ring-brand-200"
+                      placeholder={t.formName}
+                      required
+                    />
+                    <input
+                      type="email"
+                      className="w-full rounded-2xl border border-stone-200 px-4 py-3 text-stone-800 shadow-sm transition focus:border-brand-400 focus:outline-none focus:ring-2 focus:ring-brand-200"
+                      placeholder={t.formEmail}
+                      required
+                    />
+                  </div>
                   <input
-                    className="px-4 py-3 rounded-xl border border-stone-300"
-                    placeholder={t.formName}
-                    required
-                  />
-                  <input
-                    type="email"
-                    className="px-4 py-3 rounded-xl border border-stone-300"
-                    placeholder={t.formEmail}
-                    required
-                  />
-                  <input
-                    className="px-4 py-3 rounded-xl border border-stone-300"
+                    className="w-full rounded-2xl border border-stone-200 px-4 py-3 text-stone-800 shadow-sm transition focus:border-brand-400 focus:outline-none focus:ring-2 focus:ring-brand-200"
                     placeholder={t.formPhone}
                   />
                   <textarea
                     rows="5"
-                    className="px-4 py-3 rounded-xl border border-stone-300"
+                    className="w-full rounded-2xl border border-stone-200 px-4 py-3 text-stone-800 shadow-sm transition focus:border-brand-400 focus:outline-none focus:ring-2 focus:ring-brand-200"
                     placeholder={t.formMsg}
                   ></textarea>
-                  <button className="mt-2 px-5 py-3 rounded-xl bg-brand-500 text-white font-semibold hover:opacity-90">
+                  <button className="mt-2 inline-flex items-center justify-center gap-2 rounded-full bg-stone-900 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-brand-500/20 transition hover:-translate-y-0.5 hover:bg-brand-600">
                     {t.formSend}
+                    {Icon.arrow("w-4 h-4")}
                   </button>
-                </form>
-              </div>
+                </div>
+              </form>
             </div>
           </div>
         </section>
@@ -928,10 +1218,37 @@
         );
       };
 
-      const Footer = () => (
-        <footer className="py-10 border-t border-black/5">
-          <div className="max-w-6xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-stone-600">
-            <p>© {new Date().getFullYear()} Tebaca Adem — Skënderaj</p>
+      const Footer = ({ t }) => (
+        <footer className="bg-black py-12 text-slate-400">
+          <div className="max-w-7xl mx-auto flex flex-col gap-6 px-4 text-sm md:flex-row md:items-center md:justify-between">
+            <div>
+              <div className="h1 text-lg text-white">{BRAND}</div>
+              <p className="mt-2 max-w-sm text-slate-500">{t.findSub}</p>
+            </div>
+            <div className="flex flex-wrap items-center gap-4 text-slate-500">
+              <a href="#about" className="transition hover:text-white">
+                {t.nav.about}
+              </a>
+              <a href="#services" className="transition hover:text-white">
+                {t.nav.services}
+              </a>
+              <a href="#gallery" className="transition hover:text-white">
+                {t.nav.gallery}
+              </a>
+              <a href="#menu" className="transition hover:text-white">
+                {t.nav.menu}
+              </a>
+              <a href="#location" className="transition hover:text-white">
+                {t.nav.location}
+              </a>
+            </div>
+            <div className="flex flex-col items-start gap-2 text-slate-500">
+              <a href={toTelHref(t.phoneLabel)} className="inline-flex items-center gap-2 text-white transition hover:text-brand-300">
+                {Icon.phone("w-4 h-4")}
+                {t.phoneLabel}
+              </a>
+              <span>© {new Date().getFullYear()} {BRAND}</span>
+            </div>
           </div>
         </footer>
       );
@@ -956,7 +1273,7 @@
             <MenuTeaser t={t} />
             <Location t={t} />
             <Contact t={t} />
-            <Footer />
+            <Footer t={t} />
           </>
         );
       };
